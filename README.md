@@ -8,7 +8,7 @@ Sitio de marketing de **tapy.mx**: Astro estático, sin framework en el cliente.
 pnpm install
 pnpm dev        # http://localhost:4321
 pnpm build      # → dist/
-pnpm preview    # sirve dist/ con el emulador de Cloudflare Pages (_redirects incluidos)
+pnpm preview    # sirve dist/ con wrangler, igual que en producción (_redirects incluidos)
 pnpm check      # tipos
 ```
 
@@ -21,13 +21,17 @@ pnpm check      # tipos
 - `public/sw.js`: desactiva el service worker de la PWA vieja de Nuxt. Se puede borrar unos meses después del corte.
 - `public/.well-known/assetlinks.json`: lo usa la app Android `mx.tapy.app`. Debe coincidir con la copia del repo `web`.
 
-## Variables de entorno (Cloudflare Pages)
+## Deploy (Cloudflare Workers, solo assets estáticos)
+
+Workers Builds compila cada push con `pnpm run build` y despliega con `npx wrangler deploy` (`wrangler.jsonc`). No corre código: Cloudflare sirve `dist/` tal cual.
+
+## Variables de build
 
 | Variable | Valor en producción | Para qué |
 |---|---|---|
 | `PUBLIC_TURNSTILE_SITE_KEY` | la site key del widget de Turnstile | formulario de contacto (sin la variable se usa la key de prueba) |
 | `PUBLIC_APP_URL` | `https://app.tapy.mx` (es el default) | endpoint `/api/contact` |
 
-El formulario de contacto envía un POST a `app.tapy.mx/api/contact`. La app solo acepta ese endpoint desde tapy.mx, www.tapy.mx y `*.tapy-site.pages.dev` (`web/server/middleware/cors.ts`).
+El formulario de contacto envía un POST a `app.tapy.mx/api/contact`. La app solo acepta ese endpoint desde tapy.mx, www.tapy.mx y los dominios `*.workers.dev` de este Worker (`web/server/middleware/cors.ts`).
 
 El plan de la separación está en `.claude/marketing/astro-split/plan.md`.

@@ -1,0 +1,12 @@
+{
+  // Static-assets-only Worker: Cloudflare serves dist/ directly, no code runs.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "tapy-site",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    // /contact-us serves contact-us.html; unknown paths get dist/404.html.
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  }
+}
