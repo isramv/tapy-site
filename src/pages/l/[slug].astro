@@ -55,7 +55,7 @@ const jsonLd = landing && JSON.stringify({
         <div class="flex flex-col items-center text-center">
           {avatar
             ? <img src={avatar} alt={name} width="96" height="96" class="size-24 rounded-full object-cover" />
-            : <div class="flex size-24 items-center justify-center rounded-full bg-emerald-500 text-3xl font-semibold text-white">{initial}</div>}
+            : <div class="flex size-24 items-center justify-center rounded-full bg-emerald-700 text-3xl font-semibold text-white">{initial}</div>}
 
           <h1 class="mt-4 text-2xl font-semibold">{name}</h1>
 
@@ -71,7 +71,7 @@ const jsonLd = landing && JSON.stringify({
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="landing-link flex items-center gap-3 rounded-xl border-0 border-solid bg-emerald-500 px-4 py-3 text-white no-underline"
+                class="landing-link flex items-center gap-3 rounded-xl border-0 border-solid bg-emerald-700 px-4 py-3 text-white no-underline"
               >
                 <i class={linkIcon(link)}></i>
                 <span class="font-medium">{linkLabel(link)}</span>
@@ -106,9 +106,11 @@ const jsonLd = landing && JSON.stringify({
   )}
 
 <style>
-  /* Override the global `a:hover` colour so the label stays white. */
+  /* Override the global `a:hover` colour so the label stays white.
+     emerald-700/800: white text on emerald-500 is 2.5:1, below the 4.5:1 a
+     phone read in sunlight needs (WCAG AA). */
   .landing-link:hover {
     color: #fff;
-    background-color: #059669;
+    background-color: #065f46;
   }
 </style>
