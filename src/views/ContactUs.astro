@@ -1,0 +1,305 @@
+---
+import Base from '../layouts/Base.astro'
+import BrandPanel from '../components/BrandPanel.astro'
+import { localePath, useT, type Locale } from '../i18n'
+
+const { locale } = Astro.props as { locale: Locale }
+const t = useT(locale)
+
+// The form posts to the app's existing endpoint (Turnstile check, Supabase
+// row, Resend email); app.tapy.mx allows this origin for /api/contact only.
+const apiUrl = import.meta.env.PUBLIC_APP_URL ?? 'https://app.tapy.mx'
+// Cloudflare's always-pass test key outside production builds.
+const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '1x00000000000000000000AA'
+
+const fields = [
+  { name: 'name', type: 'text' as const, label: t('Full Name'), placeholder: t('Enter your full name'), help: t('Please provide your full name'), required: true, autocomplete: 'name' },
+  { name: 'phone', type: 'tel' as const, label: t('Phone Number'), placeholder: t('Enter your phone number'), help: t('Optional - We may call you for urgent matters'), required: false, autocomplete: 'tel' },
+  { name: 'email', type: 'email' as const, label: t('Email Address'), placeholder: t('Enter your email address'), help: t('Please provide a valid email address'), required: true, autocomplete: 'email' },
+]
+
+const description = 'Get in touch with the tapy. team. We are here to help with your restaurant management needs.'
+---
+<Base
+  locale={locale}
+  title={t('Contact Us')}
+  description={t(description)}
+  ogTitle="tapy. - Contact Us"
+  ogDescription={description}
+  alternatePath="/contact-us"
+  gtag
+>
+  <div class="min-h-screen flex">
+    <div class="flex-1 lg:w-1/2 flex flex-col justify-center px-6 py-12 lg:px-0 lg:pr-12 lg:pl-8 lg:items-end">
+      <div class="w-full lg:max-w-md">
+        <div class="flex mb-8">
+          <div class="mr-3">
+            <a href={localePath(locale, '/')}>
+              <img class="h-10 w-auto" src="/logo/tapy-horizontal-color.png" alt="tapy." />
+            </a>
+          </div>
+          <div>
+            <h1 class="text-2xl font-bold text-gray-900 mb-1">
+              {t('Contact Us')}
+            </h1>
+            <p class="text-gray-600 my-0">
+              {t('We\'d love to hear from you')}
+            </p>
+          </div>
+        </div>
+
+        <div class="w-full">
+          <form
+            id="contact-form"
+            class="contact-form"
+            novalidate
+            data-api={`${apiUrl}/api/contact`}
+            data-success={localePath(locale, '/thank-you')}
+            data-msg-required={t('Name is required')}
+            data-msg-email-required={t('Email is required')}
+            data-msg-email-invalid={t('Invalid email format')}
+            data-msg-message={t('Please describe your inquiry or feedback')}
+            data-msg-turnstile={t('Please complete the verification')}
+            data-msg-failed={t('Failed to send message. Please try again.')}
+          >
+            {fields.map(f => (
+              <div class="field">
+                <label for={f.name}>{f.label}</label>
+                <div class="control">
+                  <input
+                    id={f.name}
+                    name={f.name}
+                    type={f.type}
+                    placeholder={f.placeholder}
+                    autocomplete={f.autocomplete}
+                    required={f.required}
+                    aria-describedby={`${f.name}-help ${f.name}-error`}
+                  />
+                </div>
+                <div class="help" id={`${f.name}-help`}>{f.help}</div>
+                <div class="error" id={`${f.name}-error`} aria-live="polite"></div>
+              </div>
+            ))}
+
+            <div class="field">
+              <label for="message">{t('Message')}</label>
+              <div class="control">
+                <textarea
+                  id="message"
+                  name="message"
+                  rows="5"
+                  placeholder={t('Tell us how we can help you...')}
+                  required
+                  aria-describedby="message-help message-error"
+                ></textarea>
+              </div>
+              <div class="help" id="message-help">{t('Please describe your inquiry or feedback')}</div>
+              <div class="error" id="message-error" aria-live="polite"></div>
+            </div>
+
+            <div class="cf-turnstile mb-4" data-sitekey={siteKey} data-language={locale}></div>
+
+            <div class="form-error" role="alert" hidden></div>
+
+            <button type="submit" class="submit" data-sending={t('Sending...')}>
+              {t('Send Message')}
+            </button>
+          </form>
+        </div>
+
+        <div class="mt-8 text-left">
+          <a href="https://app.tapy.mx/auth/login" class="btn btn-sm btn-secondary w-full">
+            <span class="btn-label">{t('Back to Login')}</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <BrandPanel locale={locale} />
+  </div>
+
+  <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+</Base>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement
+  const msg = form.dataset
+  const submit = form.querySelector<HTMLButtonElement>('button[type=submit]')!
+  const formError = form.querySelector<HTMLElement>('.form-error')!
+  const label = submit.textContent
+
+  function setError(name: string, text: string): boolean {
+    const el = document.getElementById(`${name}-error`)!
+    el.textContent = text
+    form.querySelector(`[name=${name}]`)!.toggleAttribute('aria-invalid', !!text)
+    return !text
+  }
+
+  function validate(data: FormData): boolean {
+    const name = String(data.get('name') ?? '').trim()
+    const email = String(data.get('email') ?? '').trim()
+    const message = String(data.get('message') ?? '').trim()
+    const emailInput = form.elements.namedItem('email') as HTMLInputElement
+    return [
+      setError('name', name ? '' : msg.msgRequired!),
+      setError('email', !email ? msg.msgEmailRequired! : emailInput.validity.valid ? '' : msg.msgEmailInvalid!),
+      setError('message', message ? '' : msg.msgMessage!),
+    ].every(Boolean)
+  }
+
+  function showFormError(text: string): void {
+    formError.textContent = text
+    formError.hidden = !text
+  }
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault()
+    showFormError('')
+    const data = new FormData(form)
+    if (!validate(data)) return
+
+    const turnstileToken = String(data.get('cf-turnstile-response') ?? '')
+    if (!turnstileToken) {
+      showFormError(msg.msgTurnstile!)
+      return
+    }
+
+    submit.disabled = true
+    submit.textContent = submit.dataset.sending!
+    try {
+      const phone = String(data.get('phone') ?? '').trim()
+      const res = await fetch(msg.api!, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: String(data.get('name')).trim(),
+          email: String(data.get('email')).trim(),
+          message: String(data.get('message')).trim(),
+          ...(phone && { phone }),
+          turnstileToken,
+        }),
+      })
+      const body = await res.json().catch(() => ({}))
+      if (res.ok && body.success) {
+        window.location.href = msg.success!
+        return
+      }
+      showFormError(body.statusMessage || body.message || msg.msgFailed!)
+    }
+    catch {
+      showFormError(msg.msgFailed!)
+    }
+    // A Turnstile token is single-use; get a fresh one before a retry.
+    ;(window as unknown as { turnstile?: { reset: () => void } }).turnstile?.reset()
+    submit.disabled = false
+    submit.textContent = label
+  })
+</script>
+
+<style>
+  /* Matched to the FormKit theme the Nuxt page rendered. */
+  .contact-form .field {
+    max-width: 20em;
+    margin-bottom: 1rem;
+  }
+
+  .contact-form label {
+    display: inline-flex;
+    margin-bottom: 0.25rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 700;
+    color: #404040;
+  }
+
+  .contact-form .control {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0.25rem 0;
+    margin-bottom: 0.375rem;
+    border-radius: 0.25rem;
+    background: #fff;
+    box-shadow: 0 0 0 1px #9ca3af, 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  }
+
+  .contact-form .control:focus-within {
+    box-shadow: 0 0 0 1px #3b82f6, 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  }
+
+  .contact-form .control:has([aria-invalid]) {
+    box-shadow: 0 0 0 1px #ef4444;
+  }
+
+  .contact-form input,
+  .contact-form textarea {
+    flex-grow: 1;
+    min-width: 0;
+    min-height: 1.5em;
+    padding: 0 0.5rem;
+    border: 0;
+    outline: none;
+    background: transparent;
+    font: inherit;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    color: #404040;
+  }
+
+  .contact-form textarea {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    resize: vertical;
+  }
+
+  .contact-form ::placeholder {
+    color: #a3a3a3;
+  }
+
+  .contact-form .help {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: #737373;
+  }
+
+  .contact-form .error {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: #dc2626;
+  }
+
+  .contact-form .error:empty {
+    display: none;
+  }
+
+  .contact-form .form-error {
+    margin-bottom: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    background: #fef2f2;
+    color: #b91c1c;
+    font-size: 0.875rem;
+  }
+
+  .contact-form .submit {
+    display: inline-flex;
+    padding: 6px 10px;
+    border: 0;
+    border-radius: 6px;
+    background: #0ea5e9;
+    color: #fff;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    cursor: pointer;
+  }
+
+  .contact-form .submit:hover {
+    background: #0284c7;
+  }
+
+  .contact-form .submit:disabled {
+    opacity: 0.6;
+    cursor: wait;
+  }
+</style>

@@ -1,0 +1,224 @@
+---
+import { Image } from 'astro:assets'
+import Base from '../layouts/Base.astro'
+import hero from '../assets/links-hero.jpg'
+
+// ============================================================================
+// LINKS PAGE  ·  /links
+// Public, hardcoded landing for the QR code on printed business cards.
+// Linktree-style layout, tapy. brand colors (yellow #FDD01C / black #161818).
+// To update: edit `profile`, `socials` and `links` below. Nothing else changes.
+// (Future seam: move these consts to props/DB to make it per-business.)
+// ============================================================================
+
+interface Item {
+  label: string
+  url: string
+  icon: string // PrimeIcons class
+}
+
+const profile = {
+  name: 'Israel Morales',
+  tagline: 'Fundador de tapy.mx',
+  youtubeId: 'VIDEO_ID', // <-- the "v=..." part of the YouTube URL
+}
+
+// Small icon row under the name
+const socials: Item[] = [
+  { label: 'Instagram', url: 'https://www.instagram.com/tapy_mx', icon: 'pi pi-instagram' },
+  { label: 'TikTok', url: 'https://www.tiktok.com/@tapy_mx', icon: 'pi pi-tiktok' },
+  { label: 'Facebook', url: 'https://www.facebook.com/tapymx', icon: 'pi pi-facebook' },
+  { label: 'LinkedIn', url: 'https://www.linkedin.com/in/isramv/', icon: 'pi pi-linkedin' },
+]
+
+// Big full-width buttons
+const links: Item[] = [
+  { label: 'WhatsApp', url: 'https://api.whatsapp.com/message/MOOVKBW64HK3N1?autoload=1&app_absent=0', icon: 'pi pi-whatsapp' },
+  { label: 'Instagram', url: 'https://www.instagram.com/tapy_mx', icon: 'pi pi-instagram' },
+  { label: 'TikTok', url: 'https://www.tiktok.com/@tapy_mx', icon: 'pi pi-tiktok' },
+  { label: 'Sitio web', url: 'https://github.com/isramv', icon: 'pi pi-globe' },
+  { label: 'Correo', url: 'mailto:israel@tapy.mx', icon: 'pi pi-envelope' },
+]
+---
+<Base title={`${profile.name} · tapy.`} noindex>
+  <main class="links-page">
+    <div class="links-card">
+      <div class="links-hero">
+        <Image src={hero} alt={profile.name} widths={[480, hero.width]} sizes="480px" loading="eager" class="hero-img" />
+        <img src="/logo/tapy-horizontal-color-fondo-obscuro.png" alt="tapy." class="hero-logo" />
+        <div class="hero-overlay">
+          <h1 class="links-name">{profile.name}</h1>
+          <p class="links-tagline">{profile.tagline}</p>
+
+          <nav class="links-socials">
+            {socials.map(s => (
+              <a href={s.url} target="_blank" rel="noopener" aria-label={s.label} class="social-icon">
+                <i class={s.icon}></i>
+              </a>
+            ))}
+          </nav>
+        </div>
+      </div>
+
+      {profile.youtubeId !== 'VIDEO_ID' && (
+        <div class="links-video">
+          <iframe
+            src={`https://www.youtube-nocookie.com/embed/${profile.youtubeId}`}
+            title="YouTube video"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+      )}
+
+      <nav class="links-list">
+        {links.map(link => (
+          <a href={link.url} target="_blank" rel="noopener" class="link-btn">
+            <i class={link.icon}></i>
+            <span>{link.label}</span>
+          </a>
+        ))}
+      </nav>
+    </div>
+  </main>
+</Base>
+
+<style>
+/* tapy. brand */
+.links-page {
+  --tapy-yellow: #fdd01c;
+  --tapy-black: #161818;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1rem 3rem;
+  background: var(--tapy-black);
+}
+
+.links-card {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.links-hero {
+  position: relative;
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.hero-img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+
+.hero-logo {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  height: 22px;
+  width: auto;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: auto 0 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 3rem 1.25rem 1.25rem;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0));
+}
+
+.links-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.links-tagline {
+  margin: 0;
+  color: #fff;
+  font-weight: 500;
+  text-align: center;
+}
+
+.links-socials {
+  display: flex;
+  gap: 1.25rem;
+  margin-top: 0.25rem;
+}
+
+.social-icon {
+  color: #fff;
+  transition: color 0.12s ease, transform 0.12s ease;
+}
+
+.social-icon i {
+  font-size: 1.4rem;
+}
+
+.social-icon:hover {
+  color: var(--tapy-yellow);
+  transform: translateY(-2px);
+}
+
+.links-video {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 16px;
+  overflow: hidden;
+  margin: 0.5rem 0;
+  background: #000;
+}
+
+.links-video iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.links-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.link-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 1rem 1.25rem;
+  background: var(--tapy-yellow);
+  border-radius: 32px;
+  font-weight: 700;
+  color: var(--tapy-black);
+  text-decoration: none;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.link-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(253, 208, 28, 0.25);
+  color: var(--tapy-black);
+}
+
+.link-btn i {
+  position: absolute;
+  left: 1.25rem;
+  font-size: 1.25rem;
+}
+</style>

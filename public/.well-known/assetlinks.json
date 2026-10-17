@@ -1,0 +1,46 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "mx.tapy.app",
+      "sha256_cert_fingerprints": [
+        "04:1D:14:2D:20:CA:12:E0:01:E3:79:CD:DA:E9:C2:0C:03:B4:2A:70:D8:3B:5B:77:26:09:EC:C2:38:45:C5:CF"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.tappytaste.desktop",
+      "sha256_cert_fingerprints": [
+        "41:97:1F:D7:53:4F:64:8D:8A:D6:62:CB:E2:D3:0F:AB:AF:C2:2A:F7:D3:3B:0C:38:41:25:C5:E2:35:A3:D3:35"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "web",
+      "site": "https://app.tapy.mx"
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "web",
+      "site": "https://tapy.mx"
+    }
+  }
+]

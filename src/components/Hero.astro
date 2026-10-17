@@ -1,0 +1,54 @@
+---
+import { Image } from 'astro:assets'
+import hero from '../assets/tapy-sistema-pos-cafeteria.webp'
+import { useT, type Locale } from '../i18n'
+import { waUrl } from '../lib/whatsapp'
+
+const { locale } = Astro.props as { locale: Locale }
+const t = useT(locale)
+const demoUrl = waUrl('Hola, quiero agendar una demostración de Tapy')
+---
+<div class="bg-negro overflow-hidden">
+  <div class="container mx-auto px-4 py-16 md:py-24">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div>
+        <span class="inline-flex items-center gap-2 rounded-full bg-negro-card px-4 py-2 text-xs font-bold uppercase tracking-[1.5px] text-amarillo">
+          <span class="w-2 h-2 rounded-full bg-amarillo"></span>
+          {t('#1 Business Management Solution')}
+        </span>
+
+        <h1 id="hero-heading" class="font-display text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.05] mt-6 mb-6">
+          <span class="text-amarillo">{t('Business Management')}</span><br>
+          <span class="text-white">{t('Simplified')}</span>
+        </h1>
+
+        <p class="text-base md:text-lg text-white/70 leading-relaxed max-w-xl mb-8">
+          {t('Simplify your business operations with tapy. Take payments, control your inventory, and print tickets from a tablet with our all-in-one solution designed for any type of business.')}
+        </p>
+
+        <a
+          href={demoUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 rounded-full bg-amarillo px-7 py-3.5 text-base font-bold text-negro no-underline transition-colors hover:bg-amarillo-dark"
+        >
+          <i class="pi pi-whatsapp text-lg"></i>
+          {t('Schedule Demo')}
+        </a>
+      </div>
+
+      <div class="relative">
+        <div class="absolute -inset-4 rounded-[2rem] bg-amarillo/10 blur-2xl"></div>
+        <Image
+          src={hero}
+          alt={t('Business Management')}
+          widths={[480, 720, 960, hero.width]}
+          sizes="(min-width: 1024px) 50vw, 100vw"
+          loading="eager"
+          fetchpriority="high"
+          class="relative w-full h-auto rounded-3xl shadow-2xl object-cover"
+        />
+      </div>
+    </div>
+  </div>
+</div>

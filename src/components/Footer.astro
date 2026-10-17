@@ -1,0 +1,17 @@
+---
+import { useT, type Locale } from '../i18n'
+
+const { locale } = Astro.props as { locale: Locale }
+const t = useT(locale)
+const year = new Date().getFullYear().toString()
+---
+<footer class="bg-white pt-10 md:pt-14 pb-8 border-t border-crema-border">
+  <div class="container box-border mx-auto px-4">
+    <div class="flex flex-col items-center gap-4 text-center">
+      <img src="/logo/tapy-horizontal-color.png" alt="tapy. Logo" class="h-8" />
+      <p class="text-sm text-negro/60 m-0">
+        {t('© {year} {company}. All rights reserved.', { year, company: t('tapy.') })}
+      </p>
+    </div>
+  </div>
+</footer>

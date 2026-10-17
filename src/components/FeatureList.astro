@@ -1,0 +1,77 @@
+---
+// The three "feature" sections share one layout; only colours, copy, image
+// and side differ (web/components/Marketing/FeaturesSection{,2,3}.vue).
+import { Image } from 'astro:assets'
+import type { ImageMetadata } from 'astro'
+
+interface Props {
+  id?: string
+  title: string
+  subtitle: string
+  items: { title: string, desc: string }[]
+  image: ImageMetadata
+  alt: string
+  caption: string
+  variant: 'crema' | 'white' | 'negro'
+}
+
+const { id, title, subtitle, items, image, alt, caption, variant } = Astro.props
+const dark = variant === 'negro'
+const section = { crema: 'bg-crema', white: 'bg-white', negro: 'bg-negro' }[variant]
+const badge = { crema: 'bg-white shadow-sm', white: 'bg-crema', negro: 'bg-amarillo' }[variant]
+---
+<div class={`${section} py-16 md:py-24`}>
+  <div class="container mx-auto px-4">
+    <div class="text-center max-w-2xl mx-auto mb-12">
+      <h2 id={id} class={`font-display text-3xl md:text-4xl lg:text-5xl font-bold mt-0 mb-4 ${dark ? 'text-white' : 'text-negro'}`}>
+        {title}
+      </h2>
+      <p class={`text-base md:text-lg m-0 ${dark ? 'text-white/70' : 'text-negro/70'}`}>
+        {subtitle}
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+      <figure class={`m-0 ${dark ? 'order-1 lg:order-2' : ''}`}>
+        <div class={dark
+          ? 'rounded-2xl bg-negro-card shadow-xl overflow-hidden border border-white/10'
+          : 'rounded-2xl bg-white shadow-xl overflow-hidden border border-crema-border'}
+        >
+          <div class={`flex gap-1.5 px-4 py-3 ${dark ? 'bg-white/5' : 'bg-crema-card'}`}>
+            <span class="w-3 h-3 rounded-full bg-amarillo"></span>
+            <span class={`w-3 h-3 rounded-full ${dark ? 'bg-white/20' : 'bg-crema-border'}`}></span>
+            <span class={`w-3 h-3 rounded-full ${dark ? 'bg-white/20' : 'bg-crema-border'}`}></span>
+          </div>
+          <Image
+            src={image}
+            alt={alt}
+            widths={[480, 720, 960, Math.min(image.width, 1280)]}
+            sizes="(min-width: 1024px) 50vw, 100vw"
+            class="block w-full h-auto"
+          />
+        </div>
+        <figcaption class={`text-center text-sm mt-4 ${dark ? 'text-white/60' : 'text-negro/60'}`}>
+          {caption}
+        </figcaption>
+      </figure>
+
+      <ol class={`list-none m-0 p-0 space-y-6 ${dark ? 'order-2 lg:order-1' : ''}`}>
+        {items.map((item, i) => (
+          <li class="flex items-start gap-4">
+            <span class={`flex-shrink-0 w-12 h-12 rounded-xl text-negro font-display text-lg font-bold flex items-center justify-center ${badge}`}>
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <div>
+              <h3 class={`font-display text-lg md:text-xl font-bold mt-0 mb-1 ${dark ? 'text-white' : 'text-negro'}`}>
+                {item.title}
+              </h3>
+              <p class={`text-sm md:text-base leading-relaxed m-0 ${dark ? 'text-white/70' : 'text-negro/70'}`}>
+                {item.desc}
+              </p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</div>

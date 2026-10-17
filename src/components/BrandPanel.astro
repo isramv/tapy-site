@@ -1,0 +1,50 @@
+---
+// Dark right-hand column shared by /contact-us and /thank-you (hidden on mobile).
+import { useT, type Locale } from '../i18n'
+
+const { locale } = Astro.props as { locale: Locale }
+const t = useT(locale)
+const features = ['Order Management', 'Inventory Tracking', 'Customer Database', 'Real-time Analytics']
+---
+<div class="hidden lg:flex lg:w-1/2 brand-bg relative overflow-hidden lg:pl-12 lg:pr-8 lg:items-center">
+  <div class="absolute inset-0 bg-black bg-opacity-20"></div>
+  <div
+    class="absolute inset-0 opacity-10"
+    style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 30px 30px;"
+  ></div>
+
+  <div class="relative flex flex-col justify-center text-white pb-12 pt-0 ml-12">
+    <div class="max-w-md">
+      <h2 class="text-3xl font-bold mb-6 mt-0">
+        {t('Business Management Made Simple')}
+      </h2>
+      <p class="text-lg text-white/70 mb-8">
+        {t('Streamline your orders, inventory, and customer management with our all-in-one solution.')}
+      </p>
+
+      <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl border-[3px] border-white/20 p-6 text-left">
+        <h3 class="text-lg font-semibold mb-4 mt-0">
+          {t('Key Features')}
+        </h3>
+        <ul class="grid grid-cols-2 gap-2 text-sm text-white/70">
+          {features.map(f => (
+            <li class="flex items-center">
+              <i class="pi pi-check-circle brand-text-amarillo mr-2"></i>
+              {t(f)}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .brand-bg {
+    background-color: #161818;
+  }
+
+  .brand-text-amarillo {
+    color: #FDCF1D;
+  }
+</style>

@@ -1,0 +1,245 @@
+---
+import Base from '../layouts/Base.astro'
+import Hero from '../components/Hero.astro'
+import FeatureList from '../components/FeatureList.astro'
+import Steps from '../components/Steps.astro'
+import Contact from '../components/Contact.astro'
+import Footer from '../components/Footer.astro'
+import LanguageSwitcher from '../components/LanguageSwitcher.astro'
+import posPedidos from '../assets/pos-pedidos.png'
+import inventario from '../assets/inventario.png'
+import celular from '../assets/tapy-celular.png'
+import { localePath, useT, type Locale } from '../i18n'
+import { waUrl } from '../lib/whatsapp'
+
+const { locale } = Astro.props as { locale: Locale }
+const t = useT(locale)
+
+const loginUrl = 'https://app.tapy.mx/auth/login'
+const contactUrl = localePath(locale, '/contact-us')
+const infoUrl = waUrl('Hola, quiero info de Tapy')
+
+const navigationItems = [
+  { id: 'hero', icon: 'pi-home', label: t('Home'), ariaLabel: t('Navigate to home section') },
+  { id: 'features', icon: 'pi-star', label: t('Features'), ariaLabel: t('Navigate to features section') },
+  { id: 'contact', icon: 'pi-envelope', label: t('Contact'), ariaLabel: t('Navigate to contact section') },
+]
+
+const title = 'tapy. - Business Management Made Simple'
+const description = 'Streamline your restaurant operations with tapy. Manage orders, inventory, and customers with our all-in-one restaurant management solution.'
+---
+<Base
+  locale={locale}
+  title={title}
+  description={description}
+  keywords="restaurant management, POS system, inventory management, order management, customer database, tapy"
+  alternatePath="/"
+  gtag
+>
+  <div class="home-page min-h-screen bg-white font-body">
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-gray-800 text-white px-4 py-2 rounded-md z-50"
+    >
+      Skip to main content
+    </a>
+
+    <!-- Mobile menu: a native modal dialog stands in for PrimeVue's Drawer
+         (backdrop, Esc and focus trapping come for free). -->
+    <dialog id="mobile-menu" class="mobile-drawer" aria-label={t('Main navigation menu')}>
+      <div class="flex h-full flex-col">
+        <div class="py-2 px-3 flex justify-end">
+          <button type="button" class="btn btn-text-secondary btn-rounded w-10 h-10 p-0" data-close-menu aria-label={t('Close navigation menu')}>
+            <i class="pi pi-times" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="py-3 px-4 border-b border-gray-200 flex flex-row items-center gap-1">
+          <img src="/logo/tapy-horizontal-color.png" alt="tapy. Logo" class="h-8" />
+        </div>
+
+        <nav class="flex-1 px-4 py-6" aria-label="Mobile navigation">
+          <ul class="list-none space-y-2 m-0 p-0">
+            {navigationItems.map(item => (
+              <li class="list-none">
+                <a href={`#${item.id}`} data-close-menu aria-label={item.ariaLabel} class="btn btn-text-secondary w-full justify-start text-sm">
+                  <i class={`pi ${item.icon} mr-3 text-base`} aria-hidden="true"></i>
+                  <span class="font-medium text-base">{item.label}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div class="px-4 py-3 border-t border-gray-200">
+          <LanguageSwitcher locale={locale} path="/" variant="mobile" />
+        </div>
+
+        <div class="px-4 py-4 border-t border-gray-200 space-y-3">
+          <a href={loginUrl} aria-label={t('Go to login page')} class="btn btn-rounded w-full text-sm btn-amarillo font-bold">
+            <span class="btn-label">{t('Login')}</span>
+          </a>
+          <a href={contactUrl} aria-label={t('Go to contact page')} class="btn btn-secondary w-full text-sm">
+            <span class="btn-label">{t('Contact Us')}</span>
+          </a>
+        </div>
+      </div>
+    </dialog>
+
+    <nav class="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b flex border-gray-100 shadow-sm" aria-label="Main navigation">
+      <div class="container mx-auto flex px-4 py-3">
+        <div class="flex items-center justify-between min-w-0 w-full">
+          <div class="flex items-center">
+            <div class="grow-1">
+              <img src="/logo/tapy-horizontal-color.png" alt="tapy. Logo" class="h-8 md:h-10" />
+            </div>
+
+            <ul class="hidden lg:flex list-none space-x-3 xl:space-x-5 ml-3 xl:ml-6">
+              {navigationItems.map(item => (
+                <li>
+                  <a href={`#${item.id}`} aria-label={item.ariaLabel} class="btn btn-sm btn-text-secondary text-sm xl:text-base">
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <button
+            type="button"
+            class="btn btn-sm btn-outlined-secondary lg:hidden flex-shrink-0"
+            data-open-menu
+            aria-controls="mobile-menu"
+            aria-expanded="false"
+            aria-label={t('Open navigation menu')}
+          >
+            <i class="pi pi-bars text-lg" aria-hidden="true"></i>
+          </button>
+
+          <div class="hidden lg:flex items-center space-x-2 xl:space-x-3 flex-shrink-0">
+            <LanguageSwitcher locale={locale} path="/" />
+            <a href={loginUrl} aria-label={t('Go to login page')} class="btn btn-sm btn-rounded btn-outlined-contrast font-bold">
+              <span class="btn-label">{t('Login')}</span>
+            </a>
+            <a
+              href={infoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-amarillo inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold no-underline"
+            >
+              <i class="pi pi-whatsapp"></i>
+              WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main id="main-content">
+      <section id="hero" aria-labelledby="hero-heading">
+        <Hero locale={locale} />
+      </section>
+
+      <section id="features" aria-labelledby="features-heading">
+        <FeatureList
+          id="features-heading"
+          variant="crema"
+          title={t('Why Choose {brand}?', { brand: t('tapy.') })}
+          subtitle={t('Discover the powerful features that make restaurant management effortless')}
+          image={posPedidos}
+          alt={t('tapy orders screen')}
+          caption={t('Counter orders with real-time status')}
+          items={[
+            { title: t('Smart Order Management'), desc: t('Handle dine-in, takeout, and delivery orders seamlessly with our intuitive interface. Track order status in real-time and ensure customer satisfaction.') },
+            { title: t('Real-Time Inventory Tracking'), desc: t('Monitor ingredient levels, set automatic reorder points, and never run out of key items. Reduce waste and optimize your supply chain effortlessly.') },
+            { title: t('Customer Relationship Management'), desc: t('Build lasting relationships with detailed customer profiles and order history. Personalize experiences and increase customer loyalty.') },
+          ]}
+        />
+        <FeatureList
+          variant="negro"
+          title={t('Advanced Operations & Insights')}
+          subtitle={t('Powerful tools to manage your team, analyze performance, and stay informed')}
+          image={celular}
+          alt={t('tapy on your phone')}
+          caption={t('Sales dashboard and alerts from your phone')}
+          items={[
+            { title: t('User & Staff Management'), desc: t('Multi-user access with role-based permissions, staff scheduling, user authentication, and team collaboration tools.') },
+            { title: t('Analytics & Reporting'), desc: t('Sales performance dashboards, customer insights and trends, inventory reports, and business intelligence forecasting.') },
+            { title: t('Smart Notifications'), desc: t('Real-time alerts and updates, system notifications for important events, and automated reminders to keep you informed.') },
+          ]}
+        />
+        <FeatureList
+          variant="white"
+          title={t('Complete Business Management')}
+          subtitle={t('Everything you need to run your restaurant efficiently and profitably')}
+          image={inventario}
+          alt={t('tapy inventory screen')}
+          caption={t('Receive, count and update your stock in one screen')}
+          items={[
+            { title: t('Product Management'), desc: t('Complete product catalog with categories, pricing, and inventory. Support for variations, modifiers, and menu customization.') },
+            { title: t('Financial Management'), desc: t('Sales reporting and analytics, revenue tracking by period, payment processing, and comprehensive financial performance insights.') },
+            { title: t('Business Configuration'), desc: t('Restaurant settings and preferences, tax configuration, pricing rules, business hours, and customizable workflows.') },
+          ]}
+        />
+      </section>
+
+      <section aria-labelledby="steps-heading">
+        <Steps locale={locale} />
+      </section>
+
+      <section id="contact" aria-labelledby="contact-heading">
+        <Contact locale={locale} />
+      </section>
+    </main>
+
+    <footer>
+      <Footer locale={locale} />
+    </footer>
+  </div>
+</Base>
+
+<script>
+  const menu = document.getElementById('mobile-menu') as HTMLDialogElement
+  const opener = document.querySelector<HTMLButtonElement>('[data-open-menu]')!
+  opener.addEventListener('click', () => {
+    menu.showModal()
+    opener.setAttribute('aria-expanded', 'true')
+  })
+  menu.addEventListener('close', () => opener.setAttribute('aria-expanded', 'false'))
+  // Clicking the backdrop lands on the <dialog> itself.
+  menu.addEventListener('click', (e) => {
+    if (e.target === menu || (e.target as Element).closest('[data-close-menu]')) menu.close()
+  })
+</script>
+
+<style is:global>
+  html {
+    scroll-behavior: smooth;
+  }
+
+  .btn-amarillo {
+    background-color: #F4CF4B !important;
+    border: none !important;
+    color: #111111 !important;
+  }
+
+  .btn-amarillo:hover {
+    background-color: #E6BB10 !important;
+    color: #111111 !important;
+  }
+
+  .mobile-drawer {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    max-height: 100%;
+    width: 20rem;
+    max-width: 85vw;
+    border: 0;
+    background: #fff;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  }
+
+  .mobile-drawer::backdrop {
+    background: rgb(0 0 0 / 0.5);
+  }
+</style>

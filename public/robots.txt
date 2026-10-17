@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://tapy.mx/sitemap-index.xml

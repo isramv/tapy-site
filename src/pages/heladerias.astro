@@ -1,0 +1,56 @@
+---
+import Landing from '../views/Landing.astro'
+---
+<Landing data={{
+  seo: {
+    title: 'Tapy - Punto de Venta para Heladerías | Sistema POS México',
+    description: 'El punto de venta diseñado para heladerías en México. Cobra, administra tu inventario y crece tu negocio desde una tablet. Funciona sin internet.',
+    keywords: 'punto de venta heladería, sistema heladería, POS heladería, software heladería México, caja registradora heladería',
+    twitterTitle: 'Tapy - Punto de Venta para Heladerías',
+    twitterDescription: 'El punto de venta diseñado para heladerías en México. Cobra, administra tu inventario y crece tu negocio desde una tablet.',
+  },
+  business: 'heladería',
+  waInfo: 'Hola, quiero info de Tapy para mi heladería',
+  waTrial: 'Hola, quiero probar Tapy en mi heladería',
+  heroSubtitle: 'Cobra en segundos, controla tu inventario de paletas y helados, e imprime tickets al instante. Todo desde una tablet.',
+  price: '$599',
+  mockup: {
+    title: 'Mi Heladería',
+    total: '$60',
+    products: [
+  { emoji: '🍓', name: 'Paleta Fresa', price: '$25', active: true },
+  { emoji: '🥭', name: 'Paleta Mango', price: '$25' },
+  { emoji: '🍫', name: 'Choco-Banana', price: '$30' },
+  { emoji: '🍨', name: 'Helado 1 Bola', price: '$35', active: true },
+  { emoji: '🥥', name: 'Paleta Coco', price: '$25' },
+  { emoji: '🍋', name: 'Paleta Limón', price: '$20' },
+  { emoji: '🫐', name: 'Zarzamora', price: '$28' },
+  { emoji: '🍑', name: 'Bolis Guayaba', price: '$15' },
+  { emoji: '🧁', name: 'Banana Split', price: '$55' },
+    ],
+  },
+  problems: [
+  { emoji: '📓', title: 'Apuntas todo en libreta', desc: 'Y al final del día no sabes exactamente cuánto vendiste ni cuáles paletas se vendieron más.' },
+  { emoji: '🤷', title: 'No sabes tu inventario real', desc: 'Se te acaba la paleta de mango en pleno sábado porque no llevas un control claro de lo que tienes.' },
+  { emoji: '😰', title: 'Tus empleados cobran sin control', desc: 'No tienes forma de saber si se cobró de más, de menos, o si falta dinero en la caja.' },
+  { emoji: '📵', title: 'El internet se cae y todo se para', desc: 'Otros sistemas dependen 100% del internet. Si se cae, no puedes cobrar. Con Tapy sí.' },
+  ],
+  features: [
+  { icon: '💰', title: 'Cobra en 2 toques', desc: 'Selecciona el producto, cobra. Así de simple. Tu empleado aprende en 5 minutos.' },
+  { icon: '🧾', title: 'Tickets impresos', desc: 'Imprime tickets al instante con impresora térmica. Profesionaliza tu negocio.' },
+  { icon: '📊', title: 'Reportes de ventas', desc: 'Ve cuánto vendiste hoy, esta semana o este mes. Sabrás qué paletas se venden más.' },
+  { icon: '📦', title: 'Control de inventario', desc: 'Registra cuántas paletas y helados tienes. El sistema descuenta automáticamente al vender.' },
+  { icon: '📶', title: 'Funciona offline', desc: '¿Sin internet? No hay problema. Tapy sigue funcionando y sincroniza cuando vuelve la conexión.' },
+  { icon: '👥', title: 'Control de empleados', desc: 'Cada empleado tiene su propio acceso. Sabes quién vendió qué y cuándo.' },
+  ],
+  hardware: [
+  { emoji: '📱', title: 'Setup Básico', desc: 'Tablet + impresora USB. Lo esencial para empezar a cobrar con estilo.', price: '~$5,500', recommended: false },
+  { emoji: '⭐', title: 'Setup Recomendado', desc: 'Tablet Samsung + impresora ethernet. Impresión inmediata por cable, cero fallas.', price: '~$6,500', recommended: true },
+  { emoji: '🚀', title: 'Setup Móvil', desc: 'Tablet + impresora Bluetooth. Para heladerías móviles, carritos o eventos.', price: '~$7,000', recommended: false },
+  ],
+  testimonial: {
+    emoji: '🍦',
+    quote: 'Antes apuntaba todo en un cuaderno y al final del día no cuadraban las cuentas. Con Tapy sé exactamente cuánto vendo, qué paletas pedir y mis empleados ya no se confunden al cobrar.',
+    author: 'Heladería en Zapopan, Jalisco',
+  },
+}} />

@@ -1,0 +1,55 @@
+---
+import { useT, type Locale } from '../i18n'
+import { waUrl } from '../lib/whatsapp'
+
+const { locale } = Astro.props as { locale: Locale }
+const t = useT(locale)
+const demoUrl = waUrl('Hola, quiero agendar una demostración de Tapy')
+
+const steps = [
+  { title: t('Book a Demo'), desc: t('Write to us on WhatsApp and we will show you how tapy works for your type of business.') },
+  { title: t('Start a Trial Period'), desc: t('We activate your account and load your catalog so you can try tapy in your business before deciding.'), highlight: true },
+  { title: t('Manage Your Business Efficiently'), desc: t('Charge, control your inventory, and review your numbers from a single place, every day.') },
+]
+---
+<div class="bg-crema py-16 md:py-24">
+  <div class="container mx-auto px-4">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div>
+        <h2 id="steps-heading" class="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-negro mt-0 mb-4">
+          {t('Get Started in 3 Simple Steps')}
+        </h2>
+        <p class="text-base md:text-lg text-negro/70 mb-8">
+          {t('Setting up your restaurant management system has never been easier. Follow these simple steps to transform your operations and start seeing results immediately.')}
+        </p>
+        <a
+          href={demoUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 rounded-full bg-amarillo px-7 py-3.5 text-base font-bold text-negro no-underline transition-colors hover:bg-amarillo-dark"
+        >
+          <i class="pi pi-whatsapp text-lg"></i>
+          {t('Schedule Demo')}
+        </a>
+      </div>
+
+      <ol class="list-none m-0 p-0 space-y-4">
+        {steps.map((step, i) => (
+          <li class={`flex items-start gap-4 rounded-2xl p-6 ${step.highlight ? 'bg-negro' : 'bg-white shadow-sm'}`}>
+            <span class={`flex-shrink-0 w-12 h-12 rounded-xl font-display text-lg font-bold flex items-center justify-center ${step.highlight ? 'bg-amarillo text-negro' : 'bg-amarillo-light text-negro'}`}>
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <div>
+              <h3 class={`font-display text-lg md:text-xl font-bold mt-0 mb-1 ${step.highlight ? 'text-white' : 'text-negro'}`}>
+                {step.title}
+              </h3>
+              <p class={`text-sm md:text-base leading-relaxed m-0 ${step.highlight ? 'text-white/70' : 'text-negro/70'}`}>
+                {step.desc}
+              </p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</div>

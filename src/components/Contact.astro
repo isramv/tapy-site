@@ -1,0 +1,73 @@
+---
+import { useT, type Locale } from '../i18n'
+import { waUrl } from '../lib/whatsapp'
+
+const { locale } = Astro.props as { locale: Locale }
+const t = useT(locale)
+const demoUrl = waUrl('Hola, quiero agendar una demostración de Tapy')
+---
+<div class="bg-negro py-16 md:py-24">
+  <div class="container mx-auto px-4">
+    <div class="text-center max-w-3xl mx-auto">
+      <span class="inline-flex items-center rounded-full bg-negro-card px-4 py-2 text-xs font-bold uppercase tracking-[1.5px] text-amarillo">
+        {t('Ready to Get Started?')}
+      </span>
+
+      <h2 id="contact-heading" class="font-display text-4xl md:text-5xl font-bold leading-[1.05] mt-6 mb-6">
+        <span class="text-white">{t('Transform Your Business')}</span><br>
+        <span class="text-amarillo">{t('Starting Today')}</span>
+      </h2>
+
+      <p class="text-base md:text-lg text-white/70 max-w-2xl mx-auto mb-8">
+        {t('Join hundreds of businesses already using {brand} to streamline their operations and increase profitability.', { brand: t('tapy.') })}
+      </p>
+
+      <a
+        href={demoUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 rounded-full border-2 border-white px-7 py-3.5 text-base font-bold text-white no-underline transition-colors hover:bg-white hover:text-negro"
+      >
+        <i class="pi pi-whatsapp text-lg"></i>
+        {t('Schedule Demo')}
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto mt-14">
+      <div class="rounded-2xl bg-negro-card p-8 text-center">
+        <div class="w-14 h-14 rounded-full bg-amarillo flex items-center justify-center mx-auto mb-4">
+          <i class="pi pi-envelope text-xl text-negro"></i>
+        </div>
+        <h3 class="font-display text-lg font-bold text-white mt-0 mb-2">
+          {t('WhatsApp & Email Support')}
+        </h3>
+        <p class="text-sm text-white/60 mb-4">
+          {t('We reply on WhatsApp the same day and by email within 24 hours')}
+        </p>
+        <a href="mailto:support@tapy.mx" class="font-bold text-amarillo no-underline hover:text-amarillo-dark">
+          support@tapy.mx
+        </a>
+      </div>
+
+      <div class="rounded-2xl bg-negro-card p-8 text-center">
+        <div class="w-14 h-14 rounded-full bg-amarillo flex items-center justify-center mx-auto mb-4">
+          <i class="pi pi-video text-xl text-negro"></i>
+        </div>
+        <h3 class="font-display text-lg font-bold text-white mt-0 mb-2">
+          {t('Live Demo')}
+        </h3>
+        <p class="text-sm text-white/60 mb-4">
+          {t('See tapy. in action with a personalized demo')}
+        </p>
+        <a
+          href={demoUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 rounded-full bg-amarillo px-5 py-2.5 text-sm font-bold text-negro no-underline transition-colors hover:bg-amarillo-dark"
+        >
+          {t('Book Demo')}
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

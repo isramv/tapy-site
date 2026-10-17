@@ -1,0 +1,142 @@
+---
+import Base from '../layouts/Base.astro'
+import Footer from '../components/Footer.astro'
+import { localePath, useT, type Locale } from '../i18n'
+
+// Public privacy notice (aviso de privacidad, LFPDPPP). Linked from Google
+// Play, so it must stay reachable at /privacidad.
+
+interface PrivacySection {
+  title: string
+  body?: string[]
+  items?: string[]
+}
+
+const { locale } = Astro.props as { locale: Locale }
+const t = useT(locale)
+
+const contact = {
+  name: 'Israel Morales Valdivia',
+  email: 'privacidad@tapy.mx',
+  city: 'Zapopan, Jalisco, México',
+}
+
+// ponytail: static date; edit it whenever the notice changes
+const updatedAt = '2026-10-17'
+
+const sections: PrivacySection[] = [
+  {
+    title: 'privacy.responsible.title',
+    body: ['privacy.responsible.body'],
+  },
+  {
+    title: 'privacy.data.title',
+    body: ['privacy.data.intro'],
+    items: [
+      'privacy.data.business',
+      'privacy.data.staff',
+      'privacy.data.customers',
+      'privacy.data.contact',
+      'privacy.data.technical',
+    ],
+  },
+  {
+    title: 'privacy.permissions.title',
+    items: [
+      'privacy.permissions.camera',
+      'privacy.permissions.bluetooth',
+      'privacy.permissions.network',
+    ],
+  },
+  {
+    title: 'privacy.purposes.title',
+    body: ['privacy.purposes.primaryIntro'],
+    items: [
+      'privacy.purposes.service',
+      'privacy.purposes.sync',
+      'privacy.purposes.printing',
+      'privacy.purposes.support',
+      'privacy.purposes.billing',
+      'privacy.purposes.security',
+    ],
+  },
+  {
+    title: 'privacy.secondary.title',
+    body: ['privacy.secondary.body', 'privacy.secondary.noSale'],
+  },
+  {
+    title: 'privacy.businessData.title',
+    body: ['privacy.businessData.body'],
+  },
+  {
+    title: 'privacy.processors.title',
+    body: ['privacy.processors.intro'],
+    items: [
+      'privacy.processors.cloud',
+      'privacy.processors.security',
+      'privacy.processors.errors',
+      'privacy.processors.email',
+      'privacy.processors.distribution',
+    ],
+  },
+  {
+    title: 'privacy.transfers.title',
+    body: ['privacy.transfers.body'],
+  },
+  {
+    title: 'privacy.arco.title',
+    body: ['privacy.arco.body', 'privacy.arco.request', 'privacy.arco.response'],
+  },
+  {
+    title: 'privacy.security.title',
+    body: ['privacy.security.body'],
+  },
+  {
+    title: 'privacy.retention.title',
+    body: ['privacy.retention.body'],
+  },
+  {
+    title: 'privacy.cookies.title',
+    body: ['privacy.cookies.body'],
+  },
+  {
+    title: 'privacy.changes.title',
+    body: ['privacy.changes.body'],
+  },
+]
+---
+<Base locale={locale} title={t('privacy.pageTitle')} alternatePath="/privacidad">
+  <div class="min-h-screen bg-white">
+    <div class="container box-border mx-auto max-w-3xl px-4 py-10 md:py-14">
+      <a href={localePath(locale, '/')}>
+        <img class="h-10 w-auto mb-8" src="/logo/tapy-horizontal-color.png" alt="tapy." />
+      </a>
+
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">
+        {t('privacy.title')}
+      </h1>
+      <p class="text-sm text-gray-500 mt-0 mb-8">
+        {t('privacy.updatedAt', { date: updatedAt })}
+      </p>
+
+      {sections.map(section => (
+        <section class="mb-8">
+          <h2 class="text-xl font-semibold text-gray-900 mb-3">
+            {t(section.title)}
+          </h2>
+          {section.body?.map(paragraph => (
+            <p class="text-gray-700 leading-relaxed">
+              {t(paragraph, contact)}
+            </p>
+          ))}
+          {section.items && (
+            <ul class="list-disc pl-6 text-gray-700 leading-relaxed space-y-2">
+              {section.items.map(item => <li>{t(item, contact)}</li>)}
+            </ul>
+          )}
+        </section>
+      ))}
+    </div>
+    <Footer locale={locale} />
+  </div>
+</Base>

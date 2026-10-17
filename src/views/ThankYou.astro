@@ -1,0 +1,121 @@
+---
+import Base from '../layouts/Base.astro'
+import BrandPanel from '../components/BrandPanel.astro'
+import { localePath, useT, type Locale } from '../i18n'
+import { waUrl } from '../lib/whatsapp'
+
+const { locale } = Astro.props as { locale: Locale }
+const t = useT(locale)
+const whatsappUrl = waUrl('Hola, acabo de enviar un mensaje de contacto')
+const nextSteps = ['Our team will review your message', 'We\'ll respond within 24 hours', 'Check your email for our response']
+---
+<Base
+  locale={locale}
+  title={t('Thank You')}
+  description={t('Thank you for contacting tapy. We have received your message and will get back to you soon.')}
+  alternatePath="/thank-you"
+  gtag
+>
+  <div class="min-h-screen flex">
+    <div class="flex-1 lg:w-1/2 flex flex-col justify-center px-6 py-12 lg:px-0 lg:pr-12 lg:pl-8 lg:items-end">
+      <div class="w-full lg:max-w-md">
+        <div class="flex mb-8">
+          <div class="mr-3">
+            <img class="h-10 w-auto" src="/logo/tapy-horizontal-color.png" alt="tapy." />
+          </div>
+          <div>
+            <h1 class="text-2xl font-bold text-gray-900 mb-1">
+              {t('Thank You!')}
+            </h1>
+            <p class="text-gray-600 my-0">
+              {t('Message Sent Successfully')}
+            </p>
+          </div>
+        </div>
+
+        <div class="w-full mb-8">
+          <div class="bg-green-50 border border-green-200 rounded-lg p-6 mb-6">
+            <div class="flex items-center mb-4">
+              <i class="pi pi-check-circle text-green-500 text-2xl mr-3"></i>
+              <h2 class="text-lg font-semibold text-green-800 mt-0">
+                {t('Message Received')}
+              </h2>
+            </div>
+            <p class="text-green-700 mb-0">
+              {t('We\'ve received your message and will get back to you within 24 hours. Our team is excited to help with your restaurant management needs.')}
+            </p>
+          </div>
+
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a href={localePath(locale, '/contact-us')} class="btn btn-rounded flex-1 ty-btn-amarillo font-bold">
+              <span class="btn-label">{t('Back to Contact')}</span>
+            </a>
+            <a href={localePath(locale, '/')} class="btn btn-rounded flex-1 ty-btn-negro font-bold">
+              <span class="btn-label">{t('Go to Homepage')}</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+          <h3 class="text-sm font-semibold text-gray-800 mb-2 mt-0">
+            {t('What happens next?')}
+          </h3>
+          <ul class="text-sm text-gray-700 space-y-1 mb-0">
+            {nextSteps.map(step => (
+              <li class="flex items-start">
+                <i class="pi pi-circle-fill text-gray-400 text-xs mr-2 mt-1.5"></i>
+                {t(step)}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <a
+          href={whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-whatsapp mt-6 flex items-center justify-center gap-2 w-full rounded-full py-3 font-bold text-white no-underline"
+        >
+          <i class="pi pi-whatsapp text-lg"></i>
+          {t('Write to us on WhatsApp')}
+        </a>
+      </div>
+    </div>
+
+    <BrandPanel locale={locale} />
+  </div>
+</Base>
+
+<style>
+  .ty-btn-amarillo {
+    background-color: #FDCF1D;
+    border-color: #FDCF1D;
+    color: #161818;
+  }
+
+  .ty-btn-amarillo:hover {
+    background-color: #e6bb10;
+    border-color: #e6bb10;
+    color: #161818;
+  }
+
+  .ty-btn-negro {
+    background-color: transparent;
+    border-color: #161818;
+    color: #161818;
+  }
+
+  .ty-btn-negro:hover {
+    background-color: #161818;
+    color: #ffffff;
+  }
+
+  .btn-whatsapp {
+    background-color: #25D366;
+  }
+
+  .btn-whatsapp:hover {
+    background-color: #1da851;
+    color: #ffffff;
+  }
+</style>

@@ -1,0 +1,352 @@
+---
+// Campaign landing for one business type (/cafeterias, /heladerias). Spanish
+// only, copy hardcoded as on the Nuxt site; each page passes its own data.
+import Base from '../layouts/Base.astro'
+import { waUrl } from '../lib/whatsapp'
+
+export interface LandingData {
+  seo: { title: string, description: string, keywords: string, twitterTitle: string, twitterDescription: string }
+  /** "cafetería" / "heladería" */
+  business: string
+  waInfo: string
+  waTrial: string
+  heroSubtitle: string
+  price: string
+  mockup: { title: string, total: string, products: { emoji: string, name: string, price: string, active?: boolean }[] }
+  problems: { emoji: string, title: string, desc: string }[]
+  features: { icon: string, title: string, desc: string }[]
+  hardware: { emoji: string, title: string, desc: string, price: string, recommended: boolean }[]
+  testimonial: { emoji: string, quote: string, author: string }
+}
+
+const { data } = Astro.props as { data: LandingData }
+const WA_URL = waUrl(data.waInfo)
+const WA_TRIAL_URL = waUrl(data.waTrial)
+
+const trustItems = ['Funciona sin internet', 'Sin contratos', 'Soporte humano real', 'Prueba gratuita']
+const pricingFeatures = [
+  'Punto de venta completo',
+  'Usuarios ilimitados',
+  'Impresión de tickets',
+  'Reportes de ventas',
+  'Control de inventario',
+  'Funciona sin internet',
+  'Soporte por WhatsApp',
+  'Actualizaciones gratis',
+  'Capacitación incluida',
+]
+---
+<Base
+  title={data.seo.title}
+  description={data.seo.description}
+  keywords={data.seo.keywords}
+  twitterTitle={data.seo.twitterTitle}
+  twitterDescription={data.seo.twitterDescription}
+  gtag
+>
+  <div class="pal min-h-screen bg-white overflow-x-hidden">
+    <!-- ==================== NAV ==================== -->
+    <nav class="fixed top-0 inset-x-0 z-50 flex items-center justify-between px-4 py-3 bg-white/95 backdrop-blur-lg border-b border-gray-100 md:px-6">
+      <a href="/" class="flex items-center">
+        <img src="/logo/tapy-horizontal-color.png" alt="tapy." class="h-8 md:h-10" />
+      </a>
+      <a href={WA_URL} target="_blank" rel="noopener" class="no-underline">
+        <span class="btn btn-sm btn-rounded bg-wa-green !border-none text-white font-bold text-sm hover:-translate-y-0.5 transition-all">
+          <i class="pi pi-whatsapp"></i>
+          <span class="btn-label">Escríbenos</span>
+        </span>
+      </a>
+    </nav>
+
+    <!-- ==================== HERO ==================== -->
+    <section class="pt-24 pb-12 px-5 md:pt-32 md:pb-20">
+      <div class="max-w-[1100px] mx-auto grid grid-cols-1 gap-10 items-center lg:grid-cols-2 lg:gap-16">
+        <div class="order-2 lg:order-1">
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold mb-5 bg-amarillo-light border border-amarillo/30">
+            Hecho para {data.business}s
+          </div>
+
+          <h1 class="text-3xl font-bold leading-[1.05] mt-0 mb-5 tracking-tight sm:text-4xl lg:text-5xl xl:text-[58px]">
+            El punto de venta que tu <span class="text-amarillo">{data.business}</span> necesita
+          </h1>
+
+          <p class="text-lg text-gris leading-relaxed mb-8 max-w-[460px]">
+            {data.heroSubtitle}
+          </p>
+
+          <div class="flex items-baseline gap-2 mb-8 py-4 px-5 bg-gray-50 rounded-xl border-2 border-gray-100 max-w-[400px]">
+            <span class="text-4xl font-bold tracking-tight md:text-[44px]">{data.price}</span>
+            <span class="text-base text-gray-400 font-semibold">MXN / mes</span>
+            <span class="text-xs text-gray-300 ml-auto font-semibold">Sin contratos</span>
+          </div>
+
+          <div class="flex flex-col gap-3 sm:flex-row sm:gap-4">
+            <a href={WA_URL} target="_blank" rel="noopener" class="no-underline">
+              <span class="btn btn-lg btn-rounded bg-wa-green !border-none text-white font-bold text-lg px-8 py-4 hover:-translate-y-1 hover:shadow-lg transition-all">
+                <i class="pi pi-whatsapp"></i>
+                <span class="btn-label">Pedir información</span>
+              </span>
+            </a>
+            <a href="#precio" class="btn btn-lg btn-rounded btn-contrast flex">
+              Ver qué incluye
+            </a>
+          </div>
+        </div>
+
+        <div class="order-1 lg:order-2 flex justify-center relative">
+          <div class="mockup-tablet w-full max-w-[300px] sm:max-w-[340px] lg:max-w-[380px] bg-negro rounded-3xl p-4 shadow-2xl lg:p-5">
+            <div class="bg-white rounded-2xl overflow-hidden">
+              <div class="bg-amarillo px-4 py-3 flex items-center justify-between">
+                <b class="text-sm font-bold">{data.mockup.title}</b>
+                <span class="text-xs opacity-50 font-semibold">14:32</span>
+              </div>
+              <div class="grid grid-cols-3 gap-1.5 p-3">
+                {data.mockup.products.map(product => (
+                  <div class={`rounded-lg p-2 text-center border-2 transition-colors ${product.active ? 'border-amarillo bg-amarillo-light' : 'border-gray-100 bg-gray-50'}`}>
+                    <div class="text-lg leading-none">{product.emoji}</div>
+                    <div class="text-[9px] font-bold mt-1 text-negro">{product.name}</div>
+                    <div class="text-[9px] text-gray-400 font-semibold">{product.price}</div>
+                  </div>
+                ))}
+              </div>
+              <div class="px-4 py-3 bg-negro flex items-center justify-between rounded-b-2xl">
+                <span class="text-white font-bold text-sm">Total: {data.mockup.total}</span>
+                <span class="bg-amarillo text-negro px-4 py-2 rounded-lg font-extrabold text-xs">Cobrar →</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hidden lg:flex float-tag absolute top-8 -right-6 items-center gap-2 bg-white px-4 py-2.5 rounded-xl text-sm font-bold shadow-xl">
+            <span class="w-2 h-2 rounded-full bg-green-500"></span>
+            Impresión al instante
+          </div>
+          <div class="hidden lg:flex float-tag-delay absolute bottom-16 -left-8 items-center gap-2 bg-white px-4 py-2.5 rounded-xl text-sm font-bold shadow-xl">
+            Funciona sin internet
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TRUST BAR ==================== -->
+    <div class="py-8 px-5 text-center border-t border-b border-gray-100">
+      <div class="max-w-[820px] mx-auto flex flex-wrap justify-center gap-5 md:gap-10">
+        {trustItems.map(item => (
+          <div class="flex items-center gap-2 text-sm text-gris font-semibold">
+            <i class="pi pi-check-circle text-negro text-lg"></i>
+            {item}
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- ==================== PROBLEMS ==================== -->
+    <section class="py-16 px-5 max-w-[900px] mx-auto fade-in md:py-24">
+      <p class="text-xs font-extrabold uppercase tracking-[2.5px] text-amarillo mb-2">¿Te suena familiar?</p>
+      <h2 class="text-2xl font-bold leading-tight mt-0 mb-10 tracking-tight md:text-4xl md:mb-12">
+        Los problemas de toda {data.business}
+      </h2>
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5">
+        {data.problems.map(prob => (
+          <div class="p-6 rounded-2xl border-2 border-gray-100 transition-all hover:-translate-y-1 hover:shadow-lg hover:border-amarillo md:p-7">
+            <div class="text-3xl mb-3">{prob.emoji}</div>
+            <h3 class="text-base font-extrabold mb-2">{prob.title}</h3>
+            <p class="text-sm text-gris leading-relaxed">{prob.desc}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- ==================== FEATURES ==================== -->
+    <section class="py-16 px-5 bg-negro text-white fade-in md:py-24">
+      <div class="max-w-[900px] mx-auto">
+        <p class="text-xs font-extrabold uppercase tracking-[2.5px] text-amarillo mb-2">La solución</p>
+        <h2 class="text-2xl font-bold leading-tight mt-0 mb-10 tracking-tight text-white md:text-4xl md:mb-12">
+          Todo lo que tu {data.business} necesita
+        </h2>
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+          {data.features.map(feat => (
+            <div class="p-6 rounded-2xl bg-white/5 border border-white/10 transition-all hover:-translate-y-1 hover:bg-white/[0.07] hover:border-amarillo">
+              <div class="bg-amarillo w-12 h-12 rounded-xl flex items-center justify-center text-2xl mb-4">{feat.icon}</div>
+              <h3 class="text-base font-extrabold mb-2">{feat.title}</h3>
+              <p class="text-sm text-white/50 leading-relaxed">{feat.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== HARDWARE ==================== -->
+    <section class="py-16 px-5 max-w-[900px] mx-auto text-center fade-in md:py-24">
+      <p class="text-xs font-extrabold uppercase tracking-[2.5px] text-amarillo mb-2">¿Qué necesitas?</p>
+      <h2 class="text-2xl font-bold leading-tight mt-0 mb-10 tracking-tight md:text-4xl md:mb-12">
+        Empieza con lo mínimo
+      </h2>
+      <div class="grid grid-cols-1 gap-5 sm:grid-cols-3 sm:gap-6">
+        {data.hardware.map(hw => (
+          <div class={`relative p-8 rounded-2xl border-2 transition-all hover:-translate-y-1 hover:shadow-lg hover:border-amarillo ${hw.recommended ? 'border-amarillo bg-amarillo-light' : 'border-gray-100'}`}>
+            {hw.recommended && (
+              <span class="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-xs font-extrabold whitespace-nowrap bg-amarillo text-negro">
+                Recomendado
+              </span>
+            )}
+            <div class="text-5xl mb-3">{hw.emoji}</div>
+            <h3 class="text-base font-extrabold mb-2">{hw.title}</h3>
+            <p class="text-sm text-gris leading-relaxed mb-3">{hw.desc}</p>
+            <div class="text-2xl font-bold">
+              {hw.price} <span class="text-sm text-gray-400 font-semibold">MXN</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- ==================== TESTIMONIAL ==================== -->
+    <section class="py-16 px-5 bg-amarillo-light fade-in md:py-20">
+      <div class="max-w-[680px] mx-auto text-center">
+        <div class="text-5xl mb-5">{data.testimonial.emoji}</div>
+        <p class="text-lg italic leading-relaxed mb-6 md:text-xl">"{data.testimonial.quote}"</p>
+        <p class="text-base font-extrabold">{data.testimonial.author}</p>
+        <p class="text-sm text-gris mt-1">Cliente desde 2025</p>
+      </div>
+    </section>
+
+    <!-- ==================== PRICING ==================== -->
+    <section id="precio" class="py-16 px-5 text-center max-w-[560px] mx-auto fade-in md:py-24">
+      <p class="text-xs font-extrabold uppercase tracking-[2.5px] text-amarillo mb-2">Precio transparente</p>
+      <h2 class="text-2xl font-bold leading-tight mt-0 mb-10 tracking-tight md:text-4xl md:mb-12">
+        Sin letra chiquita, sin módulos extra
+      </h2>
+      <div class="p-8 rounded-2xl border-[3px] border-negro md:p-12">
+        <div class="text-5xl font-bold tracking-tight md:text-6xl">{data.price}</div>
+        <div class="text-lg text-gray-400 font-semibold mb-2">pesos al mes</div>
+        <div class="text-sm text-gray-400 mb-8">Sin IVA · Sin contratos · Cancela cuando quieras</div>
+        <ul class="list-none text-left mb-8 p-0">
+          {pricingFeatures.map(item => (
+            <li class="py-3 border-b border-gray-100 text-base flex items-center gap-3">
+              <i class="pi pi-check-circle text-negro text-lg"></i>
+              {item}
+            </li>
+          ))}
+        </ul>
+        <a href={WA_TRIAL_URL} target="_blank" rel="noopener" class="no-underline block">
+          <span class="btn btn-lg btn-rounded bg-wa-green !border-none text-white font-bold text-lg w-full hover:-translate-y-1 hover:shadow-lg transition-all">
+            <i class="pi pi-whatsapp"></i>
+            <span class="btn-label">Quiero probarlo gratis</span>
+          </span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ==================== COMPARISON ==================== -->
+    <section class="py-16 px-5 max-w-[900px] mx-auto fade-in md:py-24">
+      <p class="text-xs font-extrabold uppercase tracking-[2.5px] text-amarillo mb-2">¿Por qué Tapy?</p>
+      <h2 class="text-2xl font-bold leading-tight mt-0 mb-10 tracking-tight md:text-4xl md:mb-12">
+        Lo que otros cobran como "extra", nosotros lo incluimos
+      </h2>
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5">
+        <div class="p-6 rounded-2xl border-2 border-amarillo bg-amarillo-light md:p-7">
+          <div class="text-3xl mb-3">✅</div>
+          <h3 class="text-base font-extrabold mb-2">Tapy: {data.price}/mes — todo incluido</h3>
+          <p class="text-sm text-gris leading-relaxed">
+            Punto de venta, inventario, reportes, tickets, offline, soporte y capacitación. Un solo precio.
+          </p>
+        </div>
+        <div class="p-6 rounded-2xl border-2 border-gray-100 md:p-7">
+          <div class="text-3xl mb-3">💸</div>
+          <h3 class="text-base font-extrabold mb-2">Otros sistemas: $700–$1,400+/mes</h3>
+          <p class="text-sm text-gris leading-relaxed">
+            Plan base + módulo de cocina + módulo de mesas + facturación + delivery. Todo se cobra aparte.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== FINAL CTA ==================== -->
+    <section class="py-16 px-5 bg-negro text-center text-white md:py-24">
+      <h2 class="text-2xl font-bold mt-0 mb-4 tracking-tight md:text-4xl lg:text-[44px]">
+        ¿Listo para modernizar tu {data.business}?
+      </h2>
+      <p class="text-lg text-white/50 mb-10 max-w-[480px] mx-auto">
+        Escríbenos por WhatsApp y te ayudamos a empezar. Sin compromiso.
+      </p>
+      <a href={WA_URL} target="_blank" rel="noopener" class="no-underline">
+        <span class="btn btn-lg btn-rounded bg-wa-green !border-none text-white font-bold text-xl px-12 py-5 hover:-translate-y-1 hover:shadow-lg transition-all">
+          <i class="pi pi-whatsapp"></i>
+          <span class="btn-label">Escribir por WhatsApp</span>
+        </span>
+      </a>
+      <p class="mt-6 text-sm text-white/30">
+        O llámanos: <a href="tel:+523319878090" class="text-amarillo font-bold">33 1987 8090</a>
+      </p>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="py-7 px-5 text-center text-sm text-gray-400 border-t border-gray-100">
+      <p>
+        <a href="/" class="text-negro font-extrabold">tapy.</a>
+        — Punto de venta para tu negocio · Zapopan, Jalisco, México · © 2026
+      </p>
+    </footer>
+  </div>
+</Base>
+
+<script>
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add('visible')
+      })
+    },
+    { threshold: 0.1 },
+  )
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el))
+</script>
+
+<style>
+  html { scroll-behavior: smooth; }
+
+  /* ====== ROOT ====== */
+  .pal { color: #161818; }
+
+  /* ====== BRAND COLORS (these pages use their own, slightly different palette) ====== */
+  .bg-negro { background-color: #161818; }
+  .bg-amarillo { background-color: #FDCF1D; }
+  .bg-amarillo-light { background-color: #FFF8E1; }
+  .bg-wa-green { background-color: #25D366; }
+  .text-negro { color: #161818; }
+  .text-amarillo { color: #FDCF1D; }
+  .text-gris { color: #666666; }
+  .border-negro { border-color: #161818; }
+  .border-amarillo { border-color: #FDCF1D; }
+  .hover\:border-amarillo:hover { border-color: #FDCF1D; }
+
+  /* ====== MOCKUP 3D (desktop) ====== */
+  @media (min-width: 1024px) {
+    .mockup-tablet {
+      transform: perspective(1000px) rotateY(-4deg) rotateX(2deg);
+      transition: transform 0.4s;
+    }
+    .mockup-tablet:hover {
+      transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
+    }
+  }
+
+  /* ====== FLOATING TAG ANIMATIONS ====== */
+  @keyframes floaty {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  .float-tag { animation: floaty 3s ease-in-out infinite; }
+  .float-tag-delay { animation: floaty 3s ease-in-out infinite 1.5s; }
+
+  /* ====== FADE-IN ON SCROLL ====== */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>

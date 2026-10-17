@@ -1,0 +1,52 @@
+---
+// Replaces the PrimeVue Select on the Nuxt site: on a static site switching
+// language is just a link to the same page in the other locale.
+import { localePath, useT, type Locale } from '../i18n'
+
+interface Props {
+  locale: Locale
+  /** Path without locale prefix, e.g. `/` or `/contact-us`. */
+  path: string
+  variant?: 'default' | 'mobile'
+}
+
+const { locale, path, variant = 'default' } = Astro.props
+const t = useT(locale)
+const options: { code: Locale, label: string }[] = [
+  { code: 'es', label: 'Español' },
+  { code: 'en', label: 'English' },
+]
+---
+{variant === 'mobile'
+  ? (
+    <div class="space-y-2">
+      <span class="text-sm font-medium text-gray-600">{t('Language')}:</span>
+      <div class="flex gap-2">
+        {options.map(o => (
+          <a
+            href={localePath(o.code, path)}
+            hreflang={o.code}
+            aria-current={o.code === locale ? 'true' : undefined}
+            class={`btn btn-sm flex-1 ${o.code === locale ? 'btn-contrast' : 'btn-outlined-secondary'}`}
+          >
+            {o.label}
+          </a>
+        ))}
+      </div>
+    </div>
+  )
+  : (
+    <div class="flex items-center rounded-md border border-solid border-gray-300 overflow-hidden" role="group" aria-label={t('selectLanguage')}>
+      {options.map(o => (
+        <a
+          href={localePath(o.code, path)}
+          hreflang={o.code}
+          title={o.label}
+          aria-current={o.code === locale ? 'true' : undefined}
+          class={`px-3 py-1 text-sm font-semibold ${o.code === locale ? 'bg-negro text-white hover:text-white' : 'text-gray-600 hover:bg-gray-50'}`}
+        >
+          {o.code.toUpperCase()}
+        </a>
+      ))}
+    </div>
+  )}
