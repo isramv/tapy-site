@@ -1,0 +1,114 @@
+---
+// A business's public page. Rendered on request (the business edits it at any
+// time from the app) and cached at Cloudflare's edge, so a QR-code burst of
+// visits costs one call to the app per minute. The HTML arrives complete:
+// search engines and WhatsApp/Facebook previews see the content and meta tags.
+import Base from '../../layouts/Base.astro'
+import {
+  fetchLanding, isSafeUrl, isValidSlug, linkIcon, linkLabel, photoVariant, SOCIAL_KINDS,
+} from '../../lib/landing'
+
+export const prerender = false
+
+const slug = Astro.params.slug ?? ''
+const version = Astro.url.searchParams.get('v')
+const appUrl = import.meta.env.PUBLIC_APP_URL ?? 'https://app.tapy.mx'
+
+const result = isValidSlug(slug)
+  ? await fetchLanding(appUrl, slug, version)
+  : { ok: false as const, status: 404 as const }
+
+// The editor's "?v=" previews are never cached. A 404 is cached briefly too:
+// the same answer for "never existed", "unpublished" and "deleted", as in the app.
+if (!version && (result.ok || result.status === 404)) {
+  Astro.cache.set({ maxAge: 60, swr: 300, tags: [`landing:${slug}`] })
+}
+if (!result.ok) Astro.response.status = result.status
+
+const landing = result.ok ? result.landing : null
+const name = landing ? (landing.content.public_name?.trim() || landing.business?.name || '') : ''
+const description = landing?.content.short_description?.trim() || (landing ? `${name} en tapy.` : '')
+const links = landing ? (landing.content.links ?? []).filter(l => l.active && isSafeUrl(l.url)) : []
+const avatar = landing ? photoVariant(landing, 'ratioSmall') : null
+const shareImage = landing ? (photoVariant(landing, 'large') ?? undefined) : undefined
+const initial = name.trim().charAt(0).toUpperCase() || '?'
+
+// schema.org LocalBusiness: what lets Google show the business with its phone
+// and address in local results. `<` is escaped so content can't close the tag.
+const jsonLd = landing && JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name,
+  url: `https://tapy.mx/l/${slug}`,
+  ...(description && { description }),
+  ...(shareImage && { image: shareImage }),
+  ...(landing.content.phone && { telephone: landing.content.phone }),
+  ...(landing.content.address && { address: { '@type': 'PostalAddress', streetAddress: landing.content.address } }),
+  sameAs: links.filter(l => SOCIAL_KINDS.includes(l.kind)).map(l => l.url),
+}).replace(/</g, '\\u003c')
+---
+{landing
+  ? (
+    <Base title={name} description={description} ogImage={shareImage}>
+      {jsonLd && <script slot="head" type="application/ld+json" set:html={jsonLd} />}
+      <main class="mx-auto box-border w-full max-w-md px-4 py-8">
+        <div class="flex flex-col items-center text-center">
+          {avatar
+            ? <img src={avatar} alt={name} width="96" height="96" class="size-24 rounded-full object-cover" />
+            : <div class="flex size-24 items-center justify-center rounded-full bg-emerald-500 text-3xl font-semibold text-white">{initial}</div>}
+
+          <h1 class="mt-4 text-2xl font-semibold">{name}</h1>
+
+          {landing.content.short_description && (
+            <p class="mt-2 text-sm text-zinc-600">{landing.content.short_description}</p>
+          )}
+        </div>
+
+        {links.length > 0 && (
+          <div class="mt-8 flex flex-col gap-3">
+            {links.map(link => (
+              <a
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="landing-link flex items-center gap-3 rounded-xl border-0 border-solid bg-emerald-500 px-4 py-3 text-white no-underline"
+              >
+                <i class={linkIcon(link)}></i>
+                <span class="font-medium">{linkLabel(link)}</span>
+              </a>
+            ))}
+          </div>
+        )}
+
+        {(landing.content.address || landing.content.phone) && (
+          <div class="mt-8 text-center text-sm text-zinc-600">
+            {landing.content.address && <p>{landing.content.address}</p>}
+            {landing.content.phone && (
+              <p class="mt-1">
+                <a href={`tel:${landing.content.phone.replace(/[^\d+]/g, '')}`} class="text-zinc-600">{landing.content.phone}</a>
+              </p>
+            )}
+          </div>
+        )}
+      </main>
+    </Base>
+  )
+  : (
+    <Base title="tapy." noindex>
+      <main class="flex min-h-screen flex-col items-center justify-center px-6 text-center">
+        <img src="/branding/tapy-vertical-color.svg" alt="tapy." class="h-12" />
+        <h1 class="mt-8 text-xl font-semibold">Esta página no está disponible por ahora</h1>
+        <p class="mt-2 max-w-sm text-sm text-zinc-600">
+          Puede que el negocio la haya dado de baja. Inténtalo más tarde.
+        </p>
+      </main>
+    </Base>
+  )}
+
+<style>
+  /* Override the global `a:hover` colour so the label stays white. */
+  .landing-link:hover {
+    color: #fff;
+    background-color: #059669;
+  }
+</style>

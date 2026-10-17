@@ -18,6 +18,8 @@ interface Props {
   /** Path without locale prefix, e.g. `/contact-us`. Set only for pages that exist in both locales. */
   alternatePath?: string
   noindex?: boolean
+  /** Absolute URL; defaults to the tapy. logo. */
+  ogImage?: string
   gtag?: boolean
 }
 
@@ -33,11 +35,11 @@ const {
   alternatePath,
   noindex = false,
   gtag = false,
+  ogImage = 'https://tapy.mx/logo/tapy-horizontal-color.png',
 } = Astro.props
 
 const site = 'https://tapy.mx'
 const canonical = new URL(Astro.url.pathname, site).href
-const ogImage = `${site}/logo/tapy-horizontal-color.png`
 ---
 <!doctype html>
 <html lang={locale === 'es' ? 'es-MX' : 'en'}>
@@ -70,6 +72,7 @@ const ogImage = `${site}/logo/tapy-horizontal-color.png`
     {twitterDescription && <meta name="twitter:description" content={twitterDescription} />}
     <meta name="twitter:image" content={ogImage} />
     {gtag && <Gtag />}
+    <slot name="head" />
   </head>
   <body>
     <slot />

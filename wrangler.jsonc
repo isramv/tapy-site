@@ -1,12 +1,20 @@
 {
-  // Static-assets-only Worker: Cloudflare serves dist/ directly, no code runs.
+  // Prerendered pages are served straight from dist/ as static assets; the
+  // Worker only runs for on-demand routes (/l/[slug], business landings).
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "tapy-site",
+  "main": "@astrojs/cloudflare/entrypoints/server",
   "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": {
+    "binding": "ASSETS",
     "directory": "./dist",
     // /contact-us serves contact-us.html; unknown paths get dist/404.html.
     "html_handling": "auto-trailing-slash",
-    "not_found_handling": "404-page"
-  }
+    "not_found_handling": "404-page",
+    // Without this, a browser navigation to a path with no file behind it gets
+    // 404.html straight from the asset layer and the Worker never runs.
+    "run_worker_first": ["/l/*", "/sitemap-landings.xml"]
+  },
+  "observability": { "enabled": true }
 }

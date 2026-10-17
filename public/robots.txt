@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://tapy.mx/sitemap-index.xml
+Sitemap: https://tapy.mx/sitemap-landings.xml

@@ -110,3 +110,11 @@ Se mueven los 3 clientes que hoy llaman a `tapy.mx/api` a builds que usan `https
 - **Formulario:** enviar uno real desde el preview y confirmar la fila en `contact_submissions`, el correo en `contacto@tapy.mx` y el redirect a `/thank-you`.
 - **Rendimiento:** Lighthouse o el skill `web-perf` en `/` y `/cafeterias`, con la meta de LCP < 2.5 s, CLS ≈ 0 y JS casi nulo.
 - **Después del corte:** probar el login en app.tapy.mx y la recuperación de contraseña, cuyo correo debe traer un link a app.tapy.mx.
+
+## Addendum: landings `/l/[slug]` (hecho antes del corte)
+
+- tapy-site: `src/pages/l/[slug].astro` se genera en el servidor (`prerender = false`, adaptador `@astrojs/cloudflare`) y se cachea en el edge con `Astro.cache` (60 s + SWR 300, tag `landing:<slug>`). `?v=` no se cachea. Lleva meta og, canonical y JSON-LD `LocalBusiness`.
+- tapy-site: `/sitemap-landings.xml` se arma con `app.tapy.mx/api/landings/sitemap`, endpoint nuevo en web, y está en `robots.txt`.
+- web: el editor (`pages/app/links/index.vue`) arma la URL pública, el QR y "Ver mi página" con `https://tapy.mx`, no con `window.location.origin`.
+- **Después del corte (limpieza web):** `app.tapy.mx/l/*` → 301 a `https://tapy.mx/l/*`, porque hay QR impresos que apuntan a app.tapy.mx. No se puede hacer antes del corte: hoy los dos dominios sirven el mismo build y el redirect se volvería un ciclo.
+- Pendiente opcional: que la app purgue la caché del tag `landing:<slug>` al guardar, para que el cambio se vea al instante sin `?v=`.

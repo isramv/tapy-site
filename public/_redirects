@@ -4,6 +4,5 @@
 /store/*        https://app.tapy.mx/store/:splat        301
 /auth/*         https://app.tapy.mx/auth/:splat         301
 /super-admin/*  https://app.tapy.mx/super-admin/:splat  301
-/l/*            https://app.tapy.mx/l/:splat            301
 /paused         https://app.tapy.mx/paused              301
 /unauthorized   https://app.tapy.mx/unauthorized        301
