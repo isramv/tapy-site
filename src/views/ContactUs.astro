@@ -118,7 +118,16 @@ const description = 'Get in touch with the tapy. team. We are here to help with 
     <BrandPanel locale={locale} />
   </div>
 
-  <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  <!-- Turnstile renders the .cf-turnstile placeholder when its script runs;
+       fetched after load so it stays off the page's critical path. -->
+  <script is:inline>
+    addEventListener('load', () => {
+      const s = document.createElement('script')
+      s.async = true
+      s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js'
+      document.head.append(s)
+    })
+  </script>
 </Base>
 
 <script>

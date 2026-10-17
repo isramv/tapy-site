@@ -1,11 +1,18 @@
 ---
-// Google Ads conversion tag, on the same pages the Nuxt site loaded it.
+// Google Ads tag, on the same pages the Nuxt site loaded it. gtag.js (~150 KB)
+// is fetched only after the page has loaded so it never competes with the
+// page's own resources; calls made before that queue in dataLayer.
 const ID = 'AW-10806267747'
 ---
-<script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${ID}`}></script>
 <script is:inline define:vars={{ ID }}>
   window.dataLayer = window.dataLayer || []
   function gtag() { dataLayer.push(arguments) }
   gtag('js', new Date())
   gtag('config', ID)
+  addEventListener('load', () => {
+    const s = document.createElement('script')
+    s.async = true
+    s.src = `https://www.googletagmanager.com/gtag/js?id=${ID}`
+    document.head.append(s)
+  })
 </script>
