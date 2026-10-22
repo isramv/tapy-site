@@ -18,8 +18,38 @@ export interface Landing {
     address?: string
     phone?: string
     links: LandingLink[]
+    theme?: string
   }
   business: { name: string, business_photo?: { variants?: string[] } | null } | null
+}
+
+// Copied from web/utils/landingThemes.ts (names live in the app's i18n) —
+// keep them in sync. `accent` paints the link buttons under white text, `bg`
+// the page.
+const THEMES: Record<string, { accent: string, bg: string }> = {
+  esmeralda: { accent: '#0B7A55', bg: '#FFFFFF' },
+  oceano: { accent: '#1D5FA8', bg: '#F1F5FB' },
+  atardecer: { accent: '#C8501F', bg: '#FFF5EF' },
+  uva: { accent: '#6A3FA0', bg: '#F6F2FB' },
+  grafito: { accent: '#1F2933', bg: '#F3F4F5' },
+  frambuesa: { accent: '#B8325F', bg: '#FDF1F5' },
+  menta: { accent: '#0E7C7B', bg: '#EEF8F7' },
+  cielo: { accent: '#0B6FA4', bg: '#EDF7FC' },
+  indigo: { accent: '#3F47B5', bg: '#F1F2FC' },
+  lavanda: { accent: '#7A4FC4', bg: '#F7F3FE' },
+  coral: { accent: '#C2413B', bg: '#FEF2F1' },
+  mandarina: { accent: '#B35A00', bg: '#FFF6EA' },
+  mostaza: { accent: '#8A6A00', bg: '#FDF8E6' },
+  oliva: { accent: '#56702A', bg: '#F5F8EE' },
+  bosque: { accent: '#1E5B3A', bg: '#EFF5F1' },
+  cafe: { accent: '#7A4A2B', bg: '#F9F3EE' },
+  vino: { accent: '#7C1F3A', bg: '#FAF0F3' },
+  noche: { accent: '#1B2A4A', bg: '#EEF1F6' },
+}
+
+/** No theme saved (every landing before themes existed) looks as it always did. */
+export function landingTheme(id?: string) {
+  return THEMES[id ?? ''] ?? THEMES.esmeralda
 }
 
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
