@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro'
 import Hero from '../components/Hero.astro'
+import Giros from '../components/Giros.astro'
 import FeatureList from '../components/FeatureList.astro'
 import Steps from '../components/Steps.astro'
 import Contact from '../components/Contact.astro'
@@ -160,6 +161,10 @@ const jsonLd = JSON.stringify({
     <main id="main-content">
       <section id="hero" aria-labelledby="hero-heading">
         <Hero locale={locale} />
+      </section>
+
+      <section id="giros" aria-labelledby="giros-heading">
+        <Giros locale={locale} />
       </section>
 
       <section id="features" aria-labelledby="features-heading">

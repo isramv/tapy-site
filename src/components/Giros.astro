@@ -1,0 +1,62 @@
+---
+import { useT, type Locale } from '../i18n'
+
+const { locale } = Astro.props as { locale: Locale }
+const t = useT(locale)
+
+// Icons are inline stroke SVG paths (24×24), one per business type.
+const giros = [
+  {
+    href: '/florerias',
+    title: t('Flower shops'),
+    desc: t('Take payments in seconds, track your flowers and arrangements, and print tickets instantly.'),
+    cta: t('See tapy. for flower shops'),
+    icon: ['M12 2.5a3 3 0 0 1 0 2.5M12 11v11', 'M9 8a3 3 0 1 1-1-5.5M15 8a3 3 0 1 0 1-5.5', 'M12 17c-3 0-5-2-6-4 3 0 5 1 6 4zM12 15c3 0 5-2 6-4-3 0-5 1-6 4z'],
+    circle: true,
+  },
+  {
+    href: '/heladerias',
+    title: t('Ice cream shops'),
+    desc: t('Take payments in seconds, track your popsicles and ice cream, and print tickets instantly.'),
+    cta: t('See tapy. for ice cream shops'),
+    icon: ['M7 11l5 11 5-11', 'M17 11a5 5 0 0 0-10 0z'],
+  },
+  {
+    href: '/cafeterias',
+    title: t('Coffee shops'),
+    desc: t('Take payments in seconds, track your coffee and drinks, and print tickets instantly.'),
+    cta: t('See tapy. for coffee shops'),
+    icon: ['M17 8h1a4 4 0 0 1 0 8h-1', 'M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z', 'M7 2v2M11 2v2M15 2v2'],
+  },
+]
+---
+<div class="bg-white px-4 py-14">
+  <div class="container mx-auto">
+    <div class="text-center max-w-2xl mx-auto mb-10">
+      <span class="inline-flex items-center rounded-full bg-crema px-4 py-2 text-xs font-bold uppercase tracking-[1.5px] text-negro">
+        {t('Solutions by business type')}
+      </span>
+      <h2 id="giros-heading" class="font-display text-4xl font-bold mt-5 mb-3 text-negro">{t('Made for your type of business')}</h2>
+      <p class="text-lg m-0 text-negro/70">{t('See how tapy. works for your business')}</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {giros.map(g => (
+        <a href={g.href} class="flex flex-col gap-4 rounded-2xl bg-crema border border-crema-border p-7 text-negro no-underline transition-shadow hover:shadow-lg">
+          <div class="w-14 h-14 rounded-full bg-amarillo flex items-center justify-center">
+            <svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              {g.circle && <circle cx="12" cy="8" r="3" />}
+              {g.icon.map(d => <path d={d} />)}
+            </svg>
+          </div>
+          <h3 class="font-display text-2xl font-bold m-0">{g.title}</h3>
+          <p class="text-base leading-relaxed m-0 text-negro/70 grow">{g.desc}</p>
+          <span class="inline-flex items-center gap-2 font-display text-base font-bold">
+            {g.cta}
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
+          </span>
+        </a>
+      ))}
+    </div>
+  </div>
+</div>

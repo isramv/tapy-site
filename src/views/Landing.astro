@@ -1,6 +1,9 @@
 ---
-// Campaign landing for one business type (/cafeterias, /heladerias). Spanish
-// only, copy hardcoded as on the Nuxt site; each page passes its own data.
+// Campaign landing for one business type (/cafeterias, /heladerias), in the
+// homepage's look. Spanish only, copy hardcoded; each page passes its own data.
+// The hero shows a photo when the page has one, else a tablet mockup.
+import type { ImageMetadata } from 'astro'
+import { Image } from 'astro:assets'
 import Base from '../layouts/Base.astro'
 import { waUrl } from '../lib/whatsapp'
 
@@ -11,12 +14,13 @@ export interface LandingData {
   waInfo: string
   waTrial: string
   heroSubtitle: string
+  heroImage?: ImageMetadata
   price: string
-  mockup: { title: string, total: string, products: { emoji: string, name: string, price: string, active?: boolean }[] }
-  problems: { emoji: string, title: string, desc: string }[]
-  features: { icon: string, title: string, desc: string }[]
-  hardware: { emoji: string, title: string, desc: string, price: string, recommended: boolean }[]
-  testimonial: { emoji: string, quote: string, author: string }
+  mockup: { title: string, total: string, products: { name: string, price: string, active?: boolean }[] }
+  problems: { title: string, desc: string }[]
+  features: { title: string, desc: string }[]
+  hardware: { title: string, desc: string, price: string, recommended: boolean }[]
+  testimonial: { quote: string, author: string }
 }
 
 const { data } = Astro.props as { data: LandingData }
@@ -35,6 +39,10 @@ const pricingFeatures = [
   'Actualizaciones gratis',
   'Capacitación incluida',
 ]
+const n = (i: number) => String(i + 1).padStart(2, '0')
+const check = 'M5 12l5 5 9-10'
+const eyebrow = 'inline-flex rounded-full px-4 py-2 font-display text-xs font-bold uppercase tracking-[1.5px]'
+const h2 = 'font-display text-4xl md:text-5xl font-bold leading-[1.05] mt-5 mb-4'
 ---
 <Base
   title={data.seo.title}
@@ -44,309 +52,275 @@ const pricingFeatures = [
   twitterDescription={data.seo.twitterDescription}
   gtag
 >
-  <div class="pal min-h-screen bg-white overflow-x-hidden">
-    <!-- ==================== NAV ==================== -->
-    <nav class="fixed top-0 inset-x-0 z-50 flex items-center justify-between px-4 py-3 bg-white/95 backdrop-blur-lg border-b border-gray-100 md:px-6">
-      <a href="/" class="flex items-center">
-        <img width="204" height="80" src="/logo/tapy-horizontal-color-80.webp" alt="tapy." class="h-8 md:h-10 w-auto" />
-      </a>
-      <a href={WA_URL} target="_blank" rel="noopener" class="no-underline">
-        <span class="btn btn-sm btn-rounded bg-wa-green !border-none text-white font-bold text-sm hover:-translate-y-0.5 transition-all">
-          <i class="pi pi-whatsapp"></i>
-          <span class="btn-label">Escríbenos</span>
-        </span>
-      </a>
-    </nav>
-
-    <!-- ==================== HERO ==================== -->
-    <section class="pt-24 pb-12 px-5 md:pt-32 md:pb-20">
-      <div class="max-w-[1100px] mx-auto grid grid-cols-1 gap-10 items-center lg:grid-cols-2 lg:gap-16">
-        <div class="order-2 lg:order-1">
-          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold mb-5 bg-amarillo-light border border-amarillo/30">
-            Hecho para {data.business}s
-          </div>
-
-          <h1 class="text-3xl font-bold leading-[1.05] mt-0 mb-5 tracking-tight sm:text-4xl lg:text-5xl xl:text-[58px]">
-            El punto de venta que tu <span class="text-amarillo">{data.business}</span> necesita
-          </h1>
-
-          <p class="text-lg text-gris leading-relaxed mb-8 max-w-[460px]">
-            {data.heroSubtitle}
-          </p>
-
-          <div class="flex items-baseline gap-2 mb-8 py-4 px-5 bg-gray-50 rounded-xl border-2 border-gray-100 max-w-[400px]">
-            <span class="text-4xl font-bold tracking-tight md:text-[44px]">{data.price}</span>
-            <span class="text-base text-gray-400 font-semibold">MXN / mes</span>
-            <span class="text-xs text-gray-300 ml-auto font-semibold">Sin contratos</span>
-          </div>
-
-          <div class="flex flex-col gap-3 sm:flex-row sm:gap-4">
-            <a href={WA_URL} target="_blank" rel="noopener" class="no-underline">
-              <span class="btn btn-lg btn-rounded bg-wa-green !border-none text-white font-bold text-lg px-8 py-4 hover:-translate-y-1 hover:shadow-lg transition-all">
-                <i class="pi pi-whatsapp"></i>
-                <span class="btn-label">Pedir información</span>
-              </span>
-            </a>
-            <a href="#precio" class="btn btn-lg btn-rounded btn-contrast flex">
-              Ver qué incluye
-            </a>
+  <div class="home-page min-h-screen bg-white font-body text-negro overflow-x-hidden">
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-0 border-b border-solid border-gray-100 shadow-sm">
+      <nav aria-label="Navegación principal" class="container mx-auto px-4 py-3 flex items-center justify-between gap-3">
+        <div class="flex items-center gap-6">
+          <a href="/"><img width="204" height="80" src="/logo/tapy-horizontal-color-80.webp" alt="tapy." class="block h-8 md:h-10 w-auto" /></a>
+          <div class="hidden md:flex gap-2 font-display">
+            <a href="#problemas" class="px-2.5 py-1.5 text-base text-zinc-500">Problemas</a>
+            <a href="#funciones" class="px-2.5 py-1.5 text-base text-zinc-500">Funciones</a>
+            <a href="#precio" class="px-2.5 py-1.5 text-base text-zinc-500">Precio</a>
           </div>
         </div>
+        <div class="flex items-center gap-3 font-display">
+          <a href="https://app.tapy.mx/auth/login" class="hidden sm:inline-flex items-center px-3 py-1.5 border border-solid border-zinc-700 rounded-full text-xs font-bold text-zinc-950">Iniciar sesión</a>
+          <a href={WA_URL} target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amarillo hover:bg-amarillo-dark text-negro text-sm font-bold">
+            <i class="pi pi-whatsapp" aria-hidden="true"></i>WhatsApp
+          </a>
+        </div>
+      </nav>
+    </header>
 
-        <div class="order-1 lg:order-2 flex justify-center relative">
-          <div class="mockup-tablet w-full max-w-[300px] sm:max-w-[340px] lg:max-w-[380px] bg-negro rounded-3xl p-4 shadow-2xl lg:p-5">
-            <div class="bg-white rounded-2xl overflow-hidden">
-              <div class="bg-amarillo px-4 py-3 flex items-center justify-between">
-                <b class="text-sm font-bold">{data.mockup.title}</b>
-                <span class="text-xs opacity-50 font-semibold">14:32</span>
+    <main>
+      <section class="bg-negro overflow-hidden">
+        <div class="container mx-auto px-4 py-14 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <span class="inline-flex items-center gap-2 rounded-full bg-negro-card px-4 py-2 font-display text-xs font-bold uppercase tracking-[1.5px] text-amarillo">
+              <span class="w-2 h-2 rounded-full bg-amarillo"></span>Hecho para {data.business}s
+            </span>
+            <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.05] my-6">
+              <span class="text-amarillo">El punto de venta</span><br><span class="text-white">que tu {data.business} necesita</span>
+            </h1>
+            <p class="text-lg leading-relaxed text-white/70 max-w-[520px] mt-0 mb-7">{data.heroSubtitle}</p>
+            <div class="flex flex-wrap items-baseline gap-x-2.5 mb-8 px-5 py-4 bg-negro-card border border-solid border-white/10 rounded-2xl max-w-[420px] font-display">
+              <span class="text-[44px] font-bold text-amarillo tracking-tight">{data.price}</span>
+              <span class="text-base text-white/70 font-semibold">MXN / mes + IVA</span>
+              <span class="text-[13px] text-white/60 ml-auto font-semibold">Sin contratos</span>
+            </div>
+            <div class="flex flex-wrap gap-3 font-display">
+              <a href={WA_URL} target="_blank" rel="noopener" class="inline-flex items-center gap-2 rounded-full bg-amarillo hover:bg-amarillo-dark px-7 py-3.5 text-base font-bold text-negro">
+                <i class="pi pi-whatsapp text-lg" aria-hidden="true"></i>Pedir información
+              </a>
+              <a href="#precio" class="inline-flex items-center rounded-full border-2 border-solid border-white px-[26px] py-3 text-base font-bold text-white hover:text-white">Ver qué incluye</a>
+            </div>
+          </div>
+
+          {data.heroImage ? (
+            <div class="relative">
+              <Image
+                src={data.heroImage}
+                alt={`tapy. en una ${data.business}`}
+                widths={[480, 720, 960, data.heroImage.width]}
+                sizes="(min-width: 1024px) 50vw, calc(100vw - 2rem)"
+                loading="eager"
+                fetchpriority="high"
+                class="block w-full h-auto lg:h-[460px] object-cover object-[50%_35%] rounded-3xl hero-shadow"
+              />
+              <div class="absolute top-6 right-6 flex items-center gap-2 bg-white px-4 py-2.5 rounded-full font-display text-sm font-bold shadow-xl">
+                <span class="w-2 h-2 rounded-full bg-amarillo"></span>Impresión al instante
               </div>
-              <div class="grid grid-cols-3 gap-1.5 p-3">
-                {data.mockup.products.map(product => (
-                  <div class={`rounded-lg p-2 text-center border-2 transition-colors ${product.active ? 'border-amarillo bg-amarillo-light' : 'border-gray-100 bg-gray-50'}`}>
-                    <div class="text-lg leading-none">{product.emoji}</div>
-                    <div class="text-[9px] font-bold mt-1 text-negro">{product.name}</div>
-                    <div class="text-[9px] text-gray-400 font-semibold">{product.price}</div>
+              <div class="absolute bottom-6 left-6 flex items-center gap-2 bg-amarillo px-4 py-2.5 rounded-full font-display text-sm font-bold shadow-xl">Funciona sin internet</div>
+            </div>
+          ) : (
+            <div class="relative flex justify-center">
+              <div class="w-full max-w-[460px] rounded-3xl bg-negro-card border border-solid border-white/10 overflow-hidden hero-shadow">
+                <div class="flex gap-1.5 px-5 py-3.5 bg-white/5">
+                  <span class="w-3 h-3 rounded-full bg-amarillo"></span><span class="w-3 h-3 rounded-full bg-white/20"></span><span class="w-3 h-3 rounded-full bg-white/20"></span>
+                </div>
+                <div class="mx-4 mb-4 bg-crema rounded-2xl overflow-hidden">
+                  <div class="bg-amarillo px-4 py-3 flex items-center justify-between font-display">
+                    <b class="text-base">{data.mockup.title}</b><span class="text-[13px] font-semibold">14:32</span>
                   </div>
+                  <div class="grid grid-cols-3 gap-2 p-3.5">
+                    {data.mockup.products.map(p => (
+                      <div class={`rounded-[10px] px-1.5 py-3 text-center border-2 border-solid ${p.active ? 'border-amarillo bg-amarillo-light' : 'border-crema-card bg-white'}`}>
+                        <div class="font-display text-[13px] font-bold">{p.name}</div>
+                        <div class="text-[13px] text-negro/60">{p.price}</div>
+                      </div>
+                    ))}
+                  </div>
+                  <div class="px-4 py-3.5 bg-negro flex items-center justify-between font-display">
+                    <span class="text-white font-bold text-base">Total: {data.mockup.total}</span>
+                    <span class="bg-amarillo text-negro px-4 py-2 rounded-lg font-bold text-sm">Cobrar →</span>
+                  </div>
+                </div>
+              </div>
+              <div class="hidden lg:flex absolute top-[72px] -right-2 items-center gap-2 bg-white px-4 py-2.5 rounded-full font-display text-sm font-bold shadow-xl">
+                <span class="w-2 h-2 rounded-full bg-amarillo"></span>Impresión al instante
+              </div>
+              <div class="hidden lg:flex absolute bottom-10 -left-2 items-center gap-2 bg-amarillo px-4 py-2.5 rounded-full font-display text-sm font-bold shadow-xl">Funciona sin internet</div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      <div class="bg-white border-0 border-b border-solid border-crema-border px-4 py-6">
+        <div class="container mx-auto flex flex-wrap justify-center gap-x-10 gap-y-4 font-display text-base font-semibold">
+          {trustItems.map(item => (
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-amarillo flex items-center justify-center">
+                <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d={check} /></svg>
+              </span>{item}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <section id="problemas" class="bg-crema px-4 py-16 md:py-24">
+        <div class="container mx-auto">
+          <div class="text-center max-w-2xl mx-auto mb-12">
+            <span class={`${eyebrow} bg-white`}>¿Te suena familiar?</span>
+            <h2 class={h2}>Los problemas de toda {data.business}</h2>
+            <p class="text-lg m-0 text-negro/70">Si te pasa alguno de estos, tapy. está hecho para ti.</p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {data.problems.map((p, i) => (
+              <div class="flex items-start gap-4 p-6 rounded-2xl bg-white shadow-sm">
+                <span class="shrink-0 w-12 h-12 rounded-xl bg-crema font-display text-lg font-bold flex items-center justify-center">{n(i)}</span>
+                <div>
+                  <h3 class="font-display text-xl font-bold mt-0 mb-1">{p.title}</h3>
+                  <p class="text-base leading-relaxed m-0 text-negro/70">{p.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="funciones" class="bg-negro px-4 py-16 md:py-24">
+        <div class="container mx-auto">
+          <div class="text-center max-w-2xl mx-auto mb-12">
+            <span class={`${eyebrow} bg-negro-card text-amarillo`}>La solución</span>
+            <h2 class={`${h2} text-white`}>Todo lo que tu {data.business} necesita</h2>
+            <p class="text-lg m-0 text-white/70">Un solo sistema para cobrar, imprimir, controlar y crecer.</p>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {data.features.map((f, i) => (
+              <div class="p-7 rounded-2xl bg-negro-card border border-solid border-white/10">
+                <span class="w-12 h-12 rounded-xl bg-amarillo font-display text-lg font-bold flex items-center justify-center mb-4">{n(i)}</span>
+                <h3 class="font-display text-xl font-bold mt-0 mb-1.5 text-white">{f.title}</h3>
+                <p class="text-base leading-relaxed m-0 text-white/70">{f.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-white px-4 py-16 md:py-24">
+        <div class="container mx-auto">
+          <div class="text-center max-w-2xl mx-auto mb-12">
+            <span class={`${eyebrow} bg-crema`}>¿Qué necesitas?</span>
+            <h2 class={h2}>Empieza con lo mínimo</h2>
+            <p class="text-lg m-0 text-negro/70">Elige el equipo que mejor se adapte a tu {data.business}.</p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {data.hardware.map((hw, i) => (
+              <div class={`relative p-8 rounded-2xl flex flex-col gap-2.5 ${hw.recommended ? 'bg-negro shadow-xl mt-3 md:mt-0' : 'bg-white border border-solid border-crema-border shadow-sm'}`}>
+                {hw.recommended && (
+                  <span class="absolute -top-3.5 left-8 px-3.5 py-1.5 rounded-full bg-amarillo font-display text-xs font-bold uppercase tracking-[1.5px]">Recomendado</span>
+                )}
+                <span class={`w-12 h-12 rounded-xl font-display text-lg font-bold flex items-center justify-center ${hw.recommended ? 'bg-amarillo' : 'bg-crema'}`}>{n(i)}</span>
+                <h3 class={`font-display text-[22px] font-bold mt-1.5 mb-0 ${hw.recommended ? 'text-white' : ''}`}>{hw.title}</h3>
+                <p class={`text-base leading-relaxed m-0 grow ${hw.recommended ? 'text-white/70' : 'text-negro/70'}`}>{hw.desc}</p>
+                <div class={`font-display text-[28px] font-bold ${hw.recommended ? 'text-amarillo' : ''}`}>
+                  {hw.price} <span class={`text-sm font-semibold ${hw.recommended ? 'text-white/60' : 'text-negro/60'}`}>MXN</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-crema px-4 py-16 md:py-20">
+        <figure class="max-w-[760px] mx-auto text-center m-0">
+          <svg aria-hidden="true" width="48" height="48" viewBox="0 0 24 24" fill="#F4CF4B" class="mx-auto"><path d="M4 11a5 5 0 0 1 5-5v3a2 2 0 0 0-2 2h2v7H4zM13 11a5 5 0 0 1 5-5v3a2 2 0 0 0-2 2h2v7h-5z" /></svg>
+          <blockquote class="font-display text-2xl md:text-[26px] font-semibold leading-snug mx-0 mt-4 mb-6">"{data.testimonial.quote}"</blockquote>
+          <figcaption class="text-base">
+            <b class="font-display text-lg">{data.testimonial.author}</b><br><span class="text-negro/60">Cliente desde 2025</span>
+          </figcaption>
+        </figure>
+      </section>
+
+      <section id="precio" class="bg-white px-4 py-16 md:py-24">
+        <div class="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <span class={`${eyebrow} bg-crema`}>Precio transparente</span>
+            <h2 class={h2}>Sin letra chiquita,<br>sin módulos extra</h2>
+            <p class="text-lg mt-0 mb-8 text-negro/70">Lo que otros cobran como "extra", nosotros lo incluimos.</p>
+            <div class="flex flex-col gap-4">
+              <div class="flex items-start gap-4 p-6 rounded-2xl bg-amarillo-light border border-solid border-amarillo">
+                <span class="shrink-0 w-12 h-12 rounded-xl bg-amarillo flex items-center justify-center">
+                  <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d={check} /></svg>
+                </span>
+                <div>
+                  <h3 class="font-display text-xl font-bold mt-0 mb-1">Tapy: {data.price}/mes + IVA — todo incluido</h3>
+                  <p class="text-base leading-relaxed m-0 text-negro/70">Punto de venta, inventario, reportes, tickets, offline, soporte y capacitación. Un solo precio.</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-4 p-6 rounded-2xl bg-white border border-solid border-crema-border">
+                <span class="shrink-0 w-12 h-12 rounded-xl bg-crema-card flex items-center justify-center">
+                  <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3A3A3A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18" /></svg>
+                </span>
+                <div>
+                  <h3 class="font-display text-xl font-bold mt-0 mb-1">Otros sistemas: $700–$1,400+/mes</h3>
+                  <p class="text-base leading-relaxed m-0 text-negro/70">Plan base + módulo de cocina + módulo de mesas + facturación. Todo se cobra aparte.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="rounded-3xl bg-negro overflow-hidden shadow-2xl">
+            <div class="flex gap-1.5 px-5 py-3.5 bg-white/5">
+              <span class="w-3 h-3 rounded-full bg-amarillo"></span><span class="w-3 h-3 rounded-full bg-white/20"></span><span class="w-3 h-3 rounded-full bg-white/20"></span>
+            </div>
+            <div class="p-8 md:p-10">
+              <div class="flex flex-wrap items-baseline gap-x-2.5 font-display">
+                <span class="text-6xl md:text-[64px] font-bold text-amarillo tracking-tight leading-none">{data.price}</span>
+                <span class="text-lg text-white/70 font-semibold">pesos al mes + IVA</span>
+              </div>
+              <p class="text-[15px] text-white/60 mt-2 mb-6">Sin contratos · Cancela cuando quieras</p>
+              <ul class="list-none m-0 mb-8 p-0 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-white text-base">
+                {pricingFeatures.map(item => (
+                  <li class="flex items-center gap-2.5">
+                    <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F4CF4B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d={check} /></svg>{item}
+                  </li>
                 ))}
-              </div>
-              <div class="px-4 py-3 bg-negro flex items-center justify-between rounded-b-2xl">
-                <span class="text-white font-bold text-sm">Total: {data.mockup.total}</span>
-                <span class="bg-amarillo text-negro px-4 py-2 rounded-lg font-extrabold text-xs">Cobrar →</span>
-              </div>
+              </ul>
+              <a href={WA_TRIAL_URL} target="_blank" rel="noopener" class="flex items-center justify-center gap-2 rounded-full bg-amarillo hover:bg-amarillo-dark px-7 py-4 font-display text-lg font-bold text-negro">
+                <i class="pi pi-whatsapp" aria-hidden="true"></i>Quiero probarlo gratis
+              </a>
             </div>
           </div>
-
-          <div class="hidden lg:flex float-tag absolute top-8 -right-6 items-center gap-2 bg-white px-4 py-2.5 rounded-xl text-sm font-bold shadow-xl">
-            <span class="w-2 h-2 rounded-full bg-green-500"></span>
-            Impresión al instante
-          </div>
-          <div class="hidden lg:flex float-tag-delay absolute bottom-16 -left-8 items-center gap-2 bg-white px-4 py-2.5 rounded-xl text-sm font-bold shadow-xl">
-            Funciona sin internet
-          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- ==================== TRUST BAR ==================== -->
-    <div class="py-8 px-5 text-center border-t border-b border-gray-100">
-      <div class="max-w-[820px] mx-auto flex flex-wrap justify-center gap-5 md:gap-10">
-        {trustItems.map(item => (
-          <div class="flex items-center gap-2 text-sm text-gris font-semibold">
-            <i class="pi pi-check-circle text-negro text-lg"></i>
-            {item}
+      <section class="bg-negro px-4 py-16 md:py-24">
+        <div class="container mx-auto">
+          <div class="text-center max-w-3xl mx-auto">
+            <span class={`${eyebrow} bg-negro-card text-amarillo`}>Sin compromiso</span>
+            <h2 class="font-display text-4xl md:text-5xl font-bold leading-[1.05] my-6">
+              <span class="text-white">¿Listo para modernizar</span><br><span class="text-amarillo">tu {data.business}?</span>
+            </h2>
+            <p class="text-lg text-white/70 max-w-[560px] mx-auto mt-0 mb-8">Escríbenos por WhatsApp y te ayudamos a empezar. Sin compromiso.</p>
           </div>
-        ))}
-      </div>
-    </div>
-
-    <!-- ==================== PROBLEMS ==================== -->
-    <section class="py-16 px-5 max-w-[900px] mx-auto fade-in md:py-24">
-      <p class="text-xs font-extrabold uppercase tracking-[2.5px] text-amarillo mb-2">¿Te suena familiar?</p>
-      <h2 class="text-2xl font-bold leading-tight mt-0 mb-10 tracking-tight md:text-4xl md:mb-12">
-        Los problemas de toda {data.business}
-      </h2>
-      <div class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5">
-        {data.problems.map(prob => (
-          <div class="p-6 rounded-2xl border-2 border-gray-100 transition-all hover:-translate-y-1 hover:shadow-lg hover:border-amarillo md:p-7">
-            <div class="text-3xl mb-3">{prob.emoji}</div>
-            <h3 class="text-base font-extrabold mb-2">{prob.title}</h3>
-            <p class="text-sm text-gris leading-relaxed">{prob.desc}</p>
-          </div>
-        ))}
-      </div>
-    </section>
-
-    <!-- ==================== FEATURES ==================== -->
-    <section class="py-16 px-5 bg-negro text-white fade-in md:py-24">
-      <div class="max-w-[900px] mx-auto">
-        <p class="text-xs font-extrabold uppercase tracking-[2.5px] text-amarillo mb-2">La solución</p>
-        <h2 class="text-2xl font-bold leading-tight mt-0 mb-10 tracking-tight text-white md:text-4xl md:mb-12">
-          Todo lo que tu {data.business} necesita
-        </h2>
-        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
-          {data.features.map(feat => (
-            <div class="p-6 rounded-2xl bg-white/5 border border-white/10 transition-all hover:-translate-y-1 hover:bg-white/[0.07] hover:border-amarillo">
-              <div class="bg-amarillo w-12 h-12 rounded-xl flex items-center justify-center text-2xl mb-4">{feat.icon}</div>
-              <h3 class="text-base font-extrabold mb-2">{feat.title}</h3>
-              <p class="text-sm text-white/50 leading-relaxed">{feat.desc}</p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            <div class="rounded-2xl bg-negro-card p-8 text-center">
+              <div class="w-14 h-14 rounded-full bg-amarillo flex items-center justify-center mx-auto mb-4"><i class="pi pi-whatsapp text-xl text-negro" aria-hidden="true"></i></div>
+              <h3 class="font-display text-lg font-bold text-white mt-0 mb-2">Escríbenos por WhatsApp</h3>
+              <p class="text-sm text-white/60 mt-0 mb-4">Te contestamos el mismo día</p>
+              <a href={WA_URL} target="_blank" rel="noopener" class="inline-flex items-center rounded-full bg-amarillo hover:bg-amarillo-dark px-5 py-2.5 font-display text-sm font-bold text-negro">Escribir por WhatsApp</a>
             </div>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <!-- ==================== HARDWARE ==================== -->
-    <section class="py-16 px-5 max-w-[900px] mx-auto text-center fade-in md:py-24">
-      <p class="text-xs font-extrabold uppercase tracking-[2.5px] text-amarillo mb-2">¿Qué necesitas?</p>
-      <h2 class="text-2xl font-bold leading-tight mt-0 mb-10 tracking-tight md:text-4xl md:mb-12">
-        Empieza con lo mínimo
-      </h2>
-      <div class="grid grid-cols-1 gap-5 sm:grid-cols-3 sm:gap-6">
-        {data.hardware.map(hw => (
-          <div class={`relative p-8 rounded-2xl border-2 transition-all hover:-translate-y-1 hover:shadow-lg hover:border-amarillo ${hw.recommended ? 'border-amarillo bg-amarillo-light' : 'border-gray-100'}`}>
-            {hw.recommended && (
-              <span class="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-xs font-extrabold whitespace-nowrap bg-amarillo text-negro">
-                Recomendado
-              </span>
-            )}
-            <div class="text-5xl mb-3">{hw.emoji}</div>
-            <h3 class="text-base font-extrabold mb-2">{hw.title}</h3>
-            <p class="text-sm text-gris leading-relaxed mb-3">{hw.desc}</p>
-            <div class="text-2xl font-bold">
-              {hw.price} <span class="text-sm text-gray-400 font-semibold">MXN</span>
+            <div class="rounded-2xl bg-negro-card p-8 text-center">
+              <div class="w-14 h-14 rounded-full bg-amarillo flex items-center justify-center mx-auto mb-4"><i class="pi pi-phone text-xl text-negro" aria-hidden="true"></i></div>
+              <h3 class="font-display text-lg font-bold text-white mt-0 mb-2">O llámanos</h3>
+              <p class="text-sm text-white/60 mt-0 mb-4">Si prefieres hablar con alguien</p>
+              <a href="tel:+523319878090" class="font-display text-lg font-bold text-amarillo hover:text-amarillo">33 1987 8090</a>
             </div>
           </div>
-        ))}
-      </div>
-    </section>
-
-    <!-- ==================== TESTIMONIAL ==================== -->
-    <section class="py-16 px-5 bg-amarillo-light fade-in md:py-20">
-      <div class="max-w-[680px] mx-auto text-center">
-        <div class="text-5xl mb-5">{data.testimonial.emoji}</div>
-        <p class="text-lg italic leading-relaxed mb-6 md:text-xl">"{data.testimonial.quote}"</p>
-        <p class="text-base font-extrabold">{data.testimonial.author}</p>
-        <p class="text-sm text-gris mt-1">Cliente desde 2025</p>
-      </div>
-    </section>
-
-    <!-- ==================== PRICING ==================== -->
-    <section id="precio" class="py-16 px-5 text-center max-w-[560px] mx-auto fade-in md:py-24">
-      <p class="text-xs font-extrabold uppercase tracking-[2.5px] text-amarillo mb-2">Precio transparente</p>
-      <h2 class="text-2xl font-bold leading-tight mt-0 mb-10 tracking-tight md:text-4xl md:mb-12">
-        Sin letra chiquita, sin módulos extra
-      </h2>
-      <div class="p-8 rounded-2xl border-[3px] border-negro md:p-12">
-        <div class="text-5xl font-bold tracking-tight md:text-6xl">{data.price}</div>
-        <div class="text-lg text-gray-400 font-semibold mb-2">pesos al mes</div>
-        <div class="text-sm text-gray-400 mb-8">Sin IVA · Sin contratos · Cancela cuando quieras</div>
-        <ul class="list-none text-left mb-8 p-0">
-          {pricingFeatures.map(item => (
-            <li class="py-3 border-b border-gray-100 text-base flex items-center gap-3">
-              <i class="pi pi-check-circle text-negro text-lg"></i>
-              {item}
-            </li>
-          ))}
-        </ul>
-        <a href={WA_TRIAL_URL} target="_blank" rel="noopener" class="no-underline block">
-          <span class="btn btn-lg btn-rounded bg-wa-green !border-none text-white font-bold text-lg w-full hover:-translate-y-1 hover:shadow-lg transition-all">
-            <i class="pi pi-whatsapp"></i>
-            <span class="btn-label">Quiero probarlo gratis</span>
-          </span>
-        </a>
-      </div>
-    </section>
-
-    <!-- ==================== COMPARISON ==================== -->
-    <section class="py-16 px-5 max-w-[900px] mx-auto fade-in md:py-24">
-      <p class="text-xs font-extrabold uppercase tracking-[2.5px] text-amarillo mb-2">¿Por qué Tapy?</p>
-      <h2 class="text-2xl font-bold leading-tight mt-0 mb-10 tracking-tight md:text-4xl md:mb-12">
-        Lo que otros cobran como "extra", nosotros lo incluimos
-      </h2>
-      <div class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5">
-        <div class="p-6 rounded-2xl border-2 border-amarillo bg-amarillo-light md:p-7">
-          <div class="text-3xl mb-3">✅</div>
-          <h3 class="text-base font-extrabold mb-2">Tapy: {data.price}/mes — todo incluido</h3>
-          <p class="text-sm text-gris leading-relaxed">
-            Punto de venta, inventario, reportes, tickets, offline, soporte y capacitación. Un solo precio.
-          </p>
         </div>
-        <div class="p-6 rounded-2xl border-2 border-gray-100 md:p-7">
-          <div class="text-3xl mb-3">💸</div>
-          <h3 class="text-base font-extrabold mb-2">Otros sistemas: $700–$1,400+/mes</h3>
-          <p class="text-sm text-gris leading-relaxed">
-            Plan base + módulo de cocina + módulo de mesas + facturación + delivery. Todo se cobra aparte.
-          </p>
-        </div>
+      </section>
+    </main>
+
+    <footer class="bg-white px-4 pt-14 pb-8 border-0 border-t border-solid border-crema-border">
+      <div class="container mx-auto flex flex-col items-center gap-4 text-center">
+        <a href="/"><img width="204" height="80" src="/logo/tapy-horizontal-color-80.webp" alt="tapy." class="block h-8 w-auto" /></a>
+        <p class="text-sm text-negro/60 m-0">Punto de venta para tu negocio · Zapopan, Jalisco, México · © 2026</p>
       </div>
-    </section>
-
-    <!-- ==================== FINAL CTA ==================== -->
-    <section class="py-16 px-5 bg-negro text-center text-white md:py-24">
-      <h2 class="text-2xl font-bold mt-0 mb-4 tracking-tight md:text-4xl lg:text-[44px]">
-        ¿Listo para modernizar tu {data.business}?
-      </h2>
-      <p class="text-lg text-white/50 mb-10 max-w-[480px] mx-auto">
-        Escríbenos por WhatsApp y te ayudamos a empezar. Sin compromiso.
-      </p>
-      <a href={WA_URL} target="_blank" rel="noopener" class="no-underline">
-        <span class="btn btn-lg btn-rounded bg-wa-green !border-none text-white font-bold text-xl px-12 py-5 hover:-translate-y-1 hover:shadow-lg transition-all">
-          <i class="pi pi-whatsapp"></i>
-          <span class="btn-label">Escribir por WhatsApp</span>
-        </span>
-      </a>
-      <p class="mt-6 text-sm text-white/30">
-        O llámanos: <a href="tel:+523319878090" class="text-amarillo font-bold">33 1987 8090</a>
-      </p>
-    </section>
-
-    <!-- ==================== FOOTER ==================== -->
-    <footer class="py-7 px-5 text-center text-sm text-gray-400 border-t border-gray-100">
-      <p>
-        <a href="/" class="text-negro font-extrabold">tapy.</a>
-        — Punto de venta para tu negocio · Zapopan, Jalisco, México · © 2026
-      </p>
     </footer>
   </div>
 </Base>
 
-<script>
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) entry.target.classList.add('visible')
-      })
-    },
-    { threshold: 0.1 },
-  )
-  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el))
-</script>
-
 <style>
-  html { scroll-behavior: smooth; }
-
-  /* ====== ROOT ====== */
-  .pal { color: #161818; }
-
-  /* ====== BRAND COLORS (these pages use their own, slightly different palette) ====== */
-  .bg-negro { background-color: #161818; }
-  .bg-amarillo { background-color: #FDCF1D; }
-  .bg-amarillo-light { background-color: #FFF8E1; }
-  .bg-wa-green { background-color: #25D366; }
-  .text-negro { color: #161818; }
-  .text-amarillo { color: #FDCF1D; }
-  .text-gris { color: #666666; }
-  .border-negro { border-color: #161818; }
-  .border-amarillo { border-color: #FDCF1D; }
-  .hover\:border-amarillo:hover { border-color: #FDCF1D; }
-
-  /* ====== MOCKUP 3D (desktop) ====== */
-  @media (min-width: 1024px) {
-    .mockup-tablet {
-      transform: perspective(1000px) rotateY(-4deg) rotateX(2deg);
-      transition: transform 0.4s;
-    }
-    .mockup-tablet:hover {
-      transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
-    }
-  }
-
-  /* ====== FLOATING TAG ANIMATIONS ====== */
-  @keyframes floaty {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
-  }
-  .float-tag { animation: floaty 3s ease-in-out infinite; }
-  .float-tag-delay { animation: floaty 3s ease-in-out infinite 1.5s; }
-
-  /* ====== FADE-IN ON SCROLL ====== */
-  .fade-in {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-  }
-  .fade-in.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  .hero-shadow { box-shadow: 0 0 48px 16px rgb(244 207 75 / 0.1), 0 25px 50px -12px rgb(0 0 0 / 0.5); }
 </style>
