@@ -17,6 +17,8 @@ export const GET: APIRoute = async ({ cache }) => {
     return new Response('Unavailable', { status: 503 })
   }
   const urls = landings
+    // e2e-* landings are published by the e2e suite on the shared test business.
+    .filter(l => !l.slug.startsWith('e2e-'))
     .map(l => `<url><loc>https://tapy.mx/l/${encodeURIComponent(l.slug)}</loc><lastmod>${new Date(l.updated_at).toISOString()}</lastmod></url>`)
     .join('')
 
