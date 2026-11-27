@@ -20,6 +20,9 @@ importers:
       '@fontsource/blinker':
         specifier: 5.3.0
         version: 5.3.0
+      '@fontsource/dm-serif-display':
+        specifier: ^5.3.0
+        version: 5.3.0
       astro:
         specifier: 7.4.0
         version: 7.4.0(@types/node@24.19.2)(esbuild@0.28.2)(jiti@1.21.7)(yaml@2.9.1)
@@ -509,6 +512,9 @@ packages:
 
   '@fontsource/blinker@5.3.0':
     resolution: {integrity: sha512-FUbHO73CjtdBrQTISIsxAG6W6zsFNOgOIFwihbzn6eHjY9qfpCvaMd/QVEgSOgQp2GyBarwI7jNdQi/3Lzrj1Q==}
+
+  '@fontsource/dm-serif-display@5.3.0':
+    resolution: {integrity: sha512-ecRclUcYeto9fB7ghkB36H4MtUoaUYFjjornWYYeLCMHzaWEDPk2kIWgZOq0mKBNRxclRSieKcFeLonlMYDTKg==}
 
   '@img/colour@1.1.0':
     resolution: {integrity: sha512-Td76q7j57o/tLVdgS746cYARfSyxk8iEfRxewL9h4OMzYhbW4TAcppl0mT4eyqXddh6L/jwoM75mo7ixa/pCeQ==}
@@ -2593,6 +2599,8 @@ snapshots:
   '@fontsource/beiruti@5.3.0': {}
 
   '@fontsource/blinker@5.3.0': {}
+
+  '@fontsource/dm-serif-display@5.3.0': {}
 
   '@img/colour@1.1.0': {}
 

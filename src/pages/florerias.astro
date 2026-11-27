@@ -1,0 +1,497 @@
+---
+// Florerías landing: its own palette (vino/rosa) and serif headings, unlike
+// /cafeterias and /heladerias, which share views/Landing.astro. Spanish only.
+import '@fontsource/dm-serif-display/latin-400.css'
+import '@fontsource/dm-serif-display/latin-400-italic.css'
+import { Image, getImage } from 'astro:assets'
+import Base from '../layouts/Base.astro'
+import { waUrl } from '../lib/whatsapp'
+import heroPhoto from '../assets/floreria-arlop-fiori.webp'
+import posPhoto from '../assets/floreria-pos.jpg'
+import videoPoster from '../assets/floreria-agenda-video.jpg'
+
+const WA_URL = waUrl('Hola, quiero info de Tapy para mi florería')
+const WA_TRIAL_URL = waUrl('Hola, quiero probar Tapy en mi florería')
+const WA_DEMO_URL = waUrl('Hola, quiero ver la agenda de pedidos de Tapy en una demo')
+const VIDEO_URL = 'https://media.tapy.mx/agenda-pedidos.mp4'
+const poster = await getImage({ src: videoPoster, width: 680, format: 'webp' })
+const og = await getImage({ src: heroPhoto, width: 1200, format: 'jpg' })
+const ogImage = new URL(og.src, Astro.site).href
+
+const price = '$849'
+const trust = ['Funciona sin internet', 'Sin contratos', 'Soporte humano real', 'Prueba gratuita']
+const seasons = ['San Valentín', 'Día de las Madres', 'Bodas', 'Graduaciones', 'Cumpleaños', 'Aniversarios']
+const agenda = [
+  ['Todos tus pedidos por fecha', 'Un calendario con cada pedido del día, con su hora, tipo de entrega e indicaciones. El 14 de febrero, de un vistazo.'],
+  ['Reprograma con un toque', '¿El cliente cambió la fecha? Elige el nuevo día y hora, y el calendario se actualiza solo.'],
+  ['Anticipo al pedir, saldo al entregar', 'Registra pagos parciales con su método y ve en todo momento cuánto falta por cobrar.'],
+  ['Modo taller', 'Arrastra cada pedido a su siguiente etapa: en diseño, listo, en ruta, entregado.'],
+  ['Tus propias etapas', 'Cada florería define sus etapas y en cuáles se le avisa al cliente.'],
+]
+const annotations = [
+  { text: 'Tus categorías: ramos, arreglos, flores amarillas…', left: '3%', top: '47%' },
+  { text: 'Total al instante', left: '70%', top: '58%' },
+  { text: 'Efectivo, tarjeta o transferencia', left: '70%', top: '75%' },
+  { text: 'Genera el pedido en un toque', left: '70%', top: '87%' },
+]
+const features = [
+  ['Cobra en 2 toques', 'Selecciona el producto, cobra. Así de simple. Tu empleado aprende en 5 minutos.'],
+  ['Tickets impresos', 'Imprime tickets al instante con impresora térmica. Profesionaliza tu florería.'],
+  ['Reportes de ventas', 'Ve cuánto vendiste hoy, esta semana o este mes. Sabrás qué arreglos se venden más.'],
+  ['Control de inventario', 'Registra tu stock de flores, follaje, bases y listones. El sistema descuenta automáticamente al vender.'],
+  ['Funciona offline', '¿Sin internet? No hay problema. Tapy sigue funcionando y sincroniza cuando vuelve la conexión.'],
+  ['Control de empleados', 'Cada empleado tiene su propio acceso. Sabes quién vendió qué y cuándo.'],
+]
+const problems = [
+  ['Apuntas todo en libreta', 'Y al final del día no sabes exactamente cuánto vendiste ni qué arreglos se vendieron más.'],
+  ['No sabes tu inventario real', 'Se te acaban las rosas en pleno Día de las Madres porque no llevas un control claro de lo que tienes.'],
+  ['Tus empleados cobran sin control', 'No tienes forma de saber si se cobró de más, de menos, o si falta dinero en la caja.'],
+  ['El internet se cae y todo se para', 'Otros sistemas dependen 100% del internet. Si se cae, no puedes cobrar. Con Tapy sí.'],
+]
+const hardware = [
+  { title: 'Setup Básico', desc: 'Tablet + impresora USB. Lo esencial para empezar a cobrar con estilo.', price: '~$5,500' },
+  { title: 'Setup Recomendado', desc: 'Tablet Samsung + impresora Ethernet. Impresión inmediata por cable, cero fallas.', price: '~$6,500', recommended: true },
+  { title: 'Setup Móvil', desc: 'Tablet + impresora Bluetooth. Para puestos en mercados, ferias o eventos.', price: '~$7,000' },
+]
+const included = ['Punto de venta completo', 'Usuarios ilimitados', 'Impresión de tickets', 'Reportes de ventas', 'Control de inventario', 'Funciona sin internet', 'Soporte por WhatsApp', 'Actualizaciones gratis', 'Capacitación incluida']
+const n = (i: number) => String(i + 1).padStart(2, '0')
+---
+<Base
+  title="tapy. · Punto de venta para florerías en México"
+  description="Punto de venta para florerías: cobra, lleva tu agenda de pedidos con anticipos, controla tu inventario de flores e imprime tickets. Funciona sin internet."
+  ogImage={ogImage}
+  gtag
+>
+  <div class="flor">
+    <button type="button" id="motion-toggle" class="motion-toggle" aria-pressed="false" hidden>Pausar animaciones</button>
+    <header class="nav">
+      <nav aria-label="Navegación principal" class="wrap nav-in">
+        <div class="row g-24">
+          <a href="/"><img width="204" height="80" src="/logo/tapy-horizontal-color-80.webp" alt="tapy." class="logo" /></a>
+          <div class="nav-links">
+            <a href="#agenda">Agenda</a><a href="#funciones">Funciones</a><a href="#retos">Retos</a><a href="#precio">Precio</a>
+          </div>
+        </div>
+        <div class="row g-12">
+          <a href="https://app.tapy.mx/auth/login" class="btn-login">Iniciar sesión</a>
+          <a href={WA_URL} target="_blank" rel="noopener" class="btn btn-rosa btn-sm"><i class="pi pi-whatsapp" aria-hidden="true"></i>WhatsApp</a>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div aria-hidden="true" class="fx-morph blob" style="width:560px;height:560px;right:-120px;top:-140px;background:#F9E1E3"></div>
+        <div aria-hidden="true" class="fx-drift blob" style="width:220px;height:220px;left:-80px;bottom:-60px;border-radius:50%;background:#E3EADF"></div>
+        <div aria-hidden="true" class="fx-petal" style="left:58%;background:#E8A3B3;animation-duration:19s"></div>
+        <div aria-hidden="true" class="fx-petal" style="left:78%;background:#F3D5DA;animation-duration:24s;animation-delay:6s"></div>
+        <div aria-hidden="true" class="fx-petal" style="left:92%;background:#E8A3B3;animation-duration:21s;animation-delay:12s"></div>
+        <div aria-hidden="true" class="fx-petal" style="left:40%;background:#F9E1E3;animation-duration:26s;animation-delay:3s"></div>
+
+        <div class="wrap grid2 hero-grid">
+          <div>
+            <span class="pill">
+              <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="#E8A3B3"><ellipse cx="12" cy="6" rx="3.5" ry="5" /><ellipse cx="12" cy="18" rx="3.5" ry="5" /><ellipse cx="6" cy="12" rx="5" ry="3.5" /><ellipse cx="18" cy="12" rx="5" ry="3.5" /><circle cx="12" cy="12" r="3" fill="#B4436C" /></svg>Hecho para florerías
+            </span>
+            <h1 class="h1">Tú pones las <em>flores</em>,<br>nosotros el <span class="nowrap"><span class="scribble">orden<svg aria-hidden="true" viewBox="0 0 200 16" preserveAspectRatio="none"><path d="M2 10C50 2 120 2 198 8" fill="none" stroke="#E8A3B3" stroke-width="5" stroke-linecap="round" /></svg></span>.</span></h1>
+            <p class="lead">El punto de venta hecho para florerías. Cobra en segundos, controla tu inventario de flores y arreglos, e imprime tickets al instante. Todo desde una tablet.</p>
+            <div class="row wrap-row g-12">
+              <a href={WA_URL} target="_blank" rel="noopener" class="btn btn-rosa"><i class="pi pi-whatsapp" aria-hidden="true"></i>Pedir información</a>
+              <a href="#precio" class="btn btn-outline">Ver qué incluye</a>
+            </div>
+            <div class="trust">
+              {trust.map(t => <span><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10" /></svg>{t}</span>)}
+            </div>
+          </div>
+
+          <div class="hero-photo">
+            <div class="arch-wrap">
+              <div aria-hidden="true" class="arch-outline"></div>
+              <figure class="arch">
+                <Image src={heroPhoto} alt="Mostrador de Arlop Fiori con la tablet de tapy. junto a ramos de flores" widths={[400, 640, 920, heroPhoto.width]} sizes="(min-width: 1024px) 460px, calc(100vw - 4rem)" loading="eager" fetchpriority="high" />
+                <figcaption><span class="dot"></span>Así se ve tapy. en Arlop Fiori</figcaption>
+              </figure>
+              <svg aria-hidden="true" width="140" height="190" viewBox="0 0 120 160" fill="none" stroke="#B4436C" stroke-width="1.5" stroke-linecap="round" class="fx-sway flower"><path d="M60 160C60 120 58 90 60 58" /><path d="M60 122C42 114 31 100 28 82C46 87 57 100 60 122Z" fill="#E3EADF" stroke="#5E7A5A" /><path d="M60 102C78 94 89 80 92 64C75 70 64 82 60 102Z" fill="#E3EADF" stroke="#5E7A5A" />{[0, 72, 144, 216, 288].map(r => <ellipse cx="60" cy="26" rx="10" ry="18" fill="#F9E1E3" transform={`rotate(${r} 60 40)`} />)}<circle cx="60" cy="40" r="7" fill="#F4CF4B" stroke="#B4436C" /></svg>
+            </div>
+            <div class="tag fx-float" style="top:120px;right:0"><span class="dot dot-rosa"></span>Impresión al instante</div>
+            <div class="tag tag-verde fx-float2" style="top:260px;left:-4px">Funciona sin internet</div>
+          </div>
+        </div>
+      </section>
+
+      <div class="seasons">
+        <div class="wrap seasons-in">
+          {seasons.map((s, i) => <>{i > 0 && <span aria-hidden="true" class="rosa-claro">✿</span>}<span>{s}</span></>)}
+        </div>
+      </div>
+
+      <section id="agenda" class="sec bg-crema-rosa">
+        <div aria-hidden="true" class="fx-drift blob" style="width:420px;height:420px;right:-120px;top:80px;border-radius:50%;background:#F9E1E3"></div>
+        <div class="wrap-sm grid2 g-64">
+          <div>
+            <p class="eyebrow">Agenda de pedidos</p>
+            <h2 class="h2">Ningún pedido se te olvida, <em>ni el 14 de febrero</em></h2>
+            <p class="sub">¿Cuál sale primero? ¿Quién ya pagó? ¿Cuál cambió de fecha? Con la agenda de tapy. lo sabes sin buscar en libretas ni chats.</p>
+            <ul class="agenda-list">
+              {agenda.map(([t, d], i) => (
+                <li><span class="num num-sm">{n(i)}</span><div><h3 class="h3">{t}</h3><p class="muted">{d}</p></div></li>
+              ))}
+            </ul>
+            <a href={WA_DEMO_URL} target="_blank" rel="noopener" class="btn btn-rosa">Quiero ver la agenda en una demo</a>
+          </div>
+          <div class="video-col">
+            <div aria-hidden="true" class="video-outline"></div>
+            <div class="phone">
+              <video id="agenda-video" controls playsinline preload="none" poster={poster.src} aria-label="Video: cómo funciona la agenda de pedidos de tapy.">
+                <source src={VIDEO_URL} type="video/mp4" />
+              </video>
+              <button type="button" id="agenda-play" class="play" aria-label="Reproducir video de la agenda de pedidos (50 segundos)" hidden>
+                <svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24" fill="#B4436C"><path d="M8 5.5v13l11-6.5z" /></svg>
+              </button>
+            </div>
+            <p class="video-cap"><span class="dot dot-rosa"></span>Mira cómo funciona · 50 s</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="funciones" class="sec bg-vino">
+        <div aria-hidden="true" class="halo" style="width:420px;height:420px;left:-160px;top:-160px"></div>
+        <div aria-hidden="true" class="halo" style="width:300px;height:300px;right:-100px;bottom:-120px"></div>
+        <div aria-hidden="true" class="fx-petal fx-petal-long" style="left:12%;background:#E8A3B3;animation-duration:28s"></div>
+        <div aria-hidden="true" class="fx-petal fx-petal-long" style="left:35%;background:#F9E1E3;animation-duration:34s;animation-delay:9s"></div>
+        <div aria-hidden="true" class="fx-petal fx-petal-long" style="left:62%;background:#E8A3B3;animation-duration:31s;animation-delay:4s"></div>
+        <div aria-hidden="true" class="fx-petal fx-petal-long" style="left:88%;background:#F3D5DA;animation-duration:36s;animation-delay:15s"></div>
+        <div class="wrap-sm rel">
+          <div class="center head">
+            <p class="eyebrow rosa-claro">La solución</p>
+            <h2 class="h2 white">Todo lo que tu <em class="rosa-claro">florería</em> necesita</h2>
+            <p class="sub white-75 m0">Un solo sistema para cobrar, imprimir, controlar y crecer.</p>
+          </div>
+          <figure class="pos">
+            <Image src={posPhoto} alt="Tablet con tapy. mostrando el catálogo de ramos de una florería, el total y los métodos de pago" widths={[640, 1060, posPhoto.width]} sizes="(min-width: 1100px) 1060px, calc(100vw - 2rem)" />
+            {annotations.map((a, i) => <div class={`ann ${i % 2 ? 'fx-float2' : 'fx-float'}`} style={`left:${a.left};top:${a.top}`}><span class="dot dot-rosa"></span>{a.text}</div>)}
+            <figcaption>La pantalla real de tapy., configurada para una florería</figcaption>
+          </figure>
+          <div class="cards3">
+            {features.map(([t, d], i) => (
+              <div class="card-vino"><span class="num num-rosa">{n(i)}</span><h3 class="h3 white">{t}</h3><p class="muted white-75">{d}</p></div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="retos" class="sec bg-white">
+        <div class="wrap-sm grid-prob">
+          <div>
+            <p class="eyebrow">¿Te suena familiar?</p>
+            <h2 class="h2">Los retos de toda <em>florería</em></h2>
+            <p class="sub m0">Si te pasa alguno de estos, tapy. está hecho para ti.</p>
+          </div>
+          <div class="cards2">
+            {problems.map(([t, d], i) => (
+              <div class="card-prob"><span class="num">{n(i)}</span><h3 class="h3">{t}</h3><p class="muted">{d}</p></div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section class="sec bg-rosa-claro">
+        <div class="wrap-sm">
+          <div class="center head">
+            <p class="eyebrow">¿Qué necesitas?</p>
+            <h2 class="h2">Empieza con <em>lo mínimo</em></h2>
+            <p class="sub m0">Elige el equipo que mejor se adapte a tu florería.</p>
+          </div>
+          <div class="cards3 hw">
+            {hardware.map((h, i) => (
+              <div class={`card-hw ${h.recommended ? 'card-hw-rec' : ''}`}>
+                <span class={`num num-lg ${h.recommended ? 'num-rosa' : ''}`}>{n(i)}</span>
+                {h.recommended && <span class="badge">Recomendado</span>}
+                <h3 class={`h3 h3-lg ${h.recommended ? 'white' : ''}`}>{h.title}</h3>
+                <p class={`muted grow ${h.recommended ? 'white-75' : ''}`}>{h.desc}</p>
+                <div class={`serif hw-price ${h.recommended ? 'rosa-claro' : ''}`}>{h.price} <span>MXN</span></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section class="sec-sm bg-crema-rosa">
+        <figure class="quote">
+          <svg aria-hidden="true" width="72" height="96" viewBox="0 0 120 160" fill="none" stroke="#B4436C" stroke-width="1.5" stroke-linecap="round" class="quote-flower"><path d="M60 160C60 120 58 90 60 58" /><path d="M60 122C42 114 31 100 28 82C46 87 57 100 60 122Z" fill="#E3EADF" stroke="#5E7A5A" /><path d="M60 102C78 94 89 80 92 64C75 70 64 82 60 102Z" fill="#E3EADF" stroke="#5E7A5A" />{[0, 72, 144, 216, 288].map(r => <ellipse cx="60" cy="26" rx="10" ry="18" fill="#F9E1E3" transform={`rotate(${r} 60 40)`} />)}<circle cx="60" cy="40" r="7" fill="#F4CF4B" stroke="#B4436C" /></svg>
+          <blockquote>“Antes anotaba los pedidos en una libreta y en temporada siempre se me perdía alguno. Ahora cobro en la tablet, veo todos los pedidos del día y sé exactamente qué flores me quedan.”</blockquote>
+          <figcaption><b>Arlop Fiori</b><br><span class="muted-c">Floristería · Zapopan, Jalisco, México</span><br><span class="muted-c small">Cliente desde 2026</span></figcaption>
+        </figure>
+      </section>
+
+      <section id="precio" class="sec bg-white">
+        <div class="wrap-sm grid2 g-56">
+          <div>
+            <p class="eyebrow">Precio transparente</p>
+            <h2 class="h2">Sin letra chiquita, <em>sin módulos extra</em></h2>
+            <p class="sub">Lo que otros cobran como “extra”, nosotros lo incluimos.</p>
+            <div class="col g-16">
+              <div class="cmp cmp-yes">
+                <span class="cmp-ico"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10" /></svg></span>
+                <div><h3 class="h3">Tapy: {price}/mes + IVA — todo incluido</h3><p class="muted">Punto de venta, agenda de pedidos, inventario, reportes, tickets, offline, soporte y capacitación. Un solo precio.</p></div>
+              </div>
+              <div class="cmp cmp-no">
+                <span class="cmp-ico"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B4F5A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18" /></svg></span>
+                <div><h3 class="h3">Otros sistemas: $700–$1,400+/mes</h3><p class="muted">Plan base + módulo de pedidos + facturación. Todo se cobra aparte.</p></div>
+              </div>
+            </div>
+          </div>
+          <div class="plan">
+            <p class="eyebrow rosa-claro">Un solo plan</p>
+            <div class="serif plan-price">{price}</div>
+            <p class="plan-per">pesos al mes + IVA</p>
+            <p class="plan-note">Sin contratos · Cancela cuando quieras</p>
+            <ul class="plan-list">
+              {included.map(item => <li><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="#E8A3B3"><ellipse cx="12" cy="6" rx="3.5" ry="5" /><ellipse cx="12" cy="18" rx="3.5" ry="5" /><ellipse cx="6" cy="12" rx="5" ry="3.5" /><ellipse cx="18" cy="12" rx="5" ry="3.5" /></svg>{item}</li>)}
+            </ul>
+            <a href={WA_TRIAL_URL} target="_blank" rel="noopener" class="btn btn-rosa-claro full"><i class="pi pi-whatsapp" aria-hidden="true"></i>Quiero probarlo gratis</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec bg-rosa">
+        <div aria-hidden="true" class="fx-morph blob" style="width:380px;height:380px;right:-120px;top:-140px;background:#C5587F"></div>
+        <div aria-hidden="true" class="blob" style="width:260px;height:260px;left:-90px;bottom:-110px;border-radius:50%;background:#9E3A5E"></div>
+        <div aria-hidden="true" class="fx-petal" style="left:18%;background:#F9E1E3;animation-duration:20s"></div>
+        <div aria-hidden="true" class="fx-petal" style="left:46%;background:#FFE4EA;animation-duration:25s;animation-delay:7s"></div>
+        <div aria-hidden="true" class="fx-petal" style="left:72%;background:#E8A3B3;animation-duration:22s;animation-delay:3s"></div>
+        <div aria-hidden="true" class="fx-petal" style="left:90%;background:#F9E1E3;animation-duration:27s;animation-delay:12s"></div>
+        <div class="wrap-sm rel">
+          <div class="center head">
+            <h2 class="h2 h2-lg white">¿Todo listo para modernizar <em style="color:#FFE4EA">tu florería?</em></h2>
+            <p class="sub white m0">Escríbenos por WhatsApp y te ayudamos a empezar. Sin compromiso.</p>
+          </div>
+          <div class="cards2 cta">
+            <div class="cta-card bg-white">
+              <div class="cta-ico" style="background:#F9E1E3"><i class="pi pi-whatsapp" style="color:#B4436C" aria-hidden="true"></i></div>
+              <h3 class="h3 h3-lg">Escríbenos por WhatsApp</h3>
+              <p class="muted mb-18">Te contestamos el mismo día</p>
+              <a href={WA_URL} target="_blank" rel="noopener" class="btn btn-rosa btn-sm">Escribir por WhatsApp</a>
+            </div>
+            <div class="cta-card bg-vino">
+              <div class="cta-ico" style="background:#E8A3B3"><i class="pi pi-phone" style="color:#3D1F2B" aria-hidden="true"></i></div>
+              <h3 class="h3 h3-lg white">O llámanos</h3>
+              <p class="muted white-75 mb-18">Si prefieres hablar con alguien</p>
+              <a href="tel:+523319878090" class="serif phone-link">33 1987 8090</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <a href="/"><img width="204" height="80" src="/logo/tapy-horizontal-color-80.webp" alt="tapy." class="logo-sm" /></a>
+      <p class="muted-c small m0">Punto de venta para tu negocio · © 2026</p>
+      <p class="made">Hecho con <svg role="img" aria-label="amor" width="16" height="16" viewBox="0 0 24 24" fill="#B4436C"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 3 4.5 6.7 4.5c2.1 0 3.6 1.2 4.3 2.4.7-1.2 2.2-2.4 4.3-2.4 3.7 0 5.8 3.8 4.3 7.2C19.5 16.4 12 21 12 21z" /></svg> en Zapopan, Jalisco, México</p>
+    </footer>
+  </div>
+</Base>
+
+<script>
+  // The big play button stands in for the native controls until the first
+  // play; without JS the video keeps its native controls.
+  const video = document.getElementById('agenda-video') as HTMLVideoElement
+  const play = document.getElementById('agenda-play') as HTMLButtonElement
+  video.controls = false
+  play.hidden = false
+  play.addEventListener('click', () => {
+    video.controls = true
+    play.hidden = true
+    video.focus()
+    video.play().catch(() => {})
+  })
+
+  // WCAG 2.2.2: the petals and blobs loop forever, so they need a pause control.
+  const flor = document.querySelector('.flor') as HTMLElement
+  const motion = document.getElementById('motion-toggle') as HTMLButtonElement
+  motion.hidden = false
+  motion.addEventListener('click', () => {
+    const paused = flor.classList.toggle('paused')
+    motion.setAttribute('aria-pressed', String(paused))
+    motion.textContent = paused ? 'Reanudar animaciones' : 'Pausar animaciones'
+  })
+</script>
+
+<style>
+  /* Palette: vino #3D1F2B, rosa #B4436C, rosa claro #E8A3B3/#F9E1E3, crema #FFF7F5. */
+  .flor { font-family: Beiruti, -apple-system, 'Segoe UI', Roboto, sans-serif; background: #FFF7F5; color: #3D1F2B; min-height: 100vh; overflow-x: hidden; }
+  .flor, .flor * { box-sizing: border-box; }
+  .flor :is(h1, h2, h3), .serif { font-family: 'DM Serif Display', Georgia, serif; font-weight: 400; font-synthesis: none; }
+  .flor a { color: #3D1F2B; text-decoration: none; }
+  .flor em { font-style: italic; color: #B4436C; }
+
+  .wrap { max-width: 1280px; margin: 0 auto; }
+  .wrap-sm { max-width: 1180px; margin: 0 auto; position: relative; }
+  .rel { position: relative; }
+  .row { display: flex; align-items: center; }
+  .wrap-row { flex-wrap: wrap; }
+  .col { display: flex; flex-direction: column; }
+  .g-12 { gap: 12px; } .g-16 { gap: 16px; } .g-24 { gap: 24px; }
+  .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr)); gap: 56px; align-items: center; }
+  .g-64 { gap: 64px; } .g-56 { gap: 56px; }
+  .center { text-align: center; }
+  .head { max-width: 680px; margin: 0 auto 56px; }
+  .m0 { margin: 0 !important; } .mb-18 { margin-bottom: 18px !important; }
+  .white { color: #fff !important; } .white-75 { color: rgb(255 255 255 / .75) !important; } .white-85 { color: rgb(255 255 255 / .85) !important; }
+  .rosa-claro { color: #E8A3B3; }
+  .grow { flex-grow: 1; }
+  .small { font-size: 14px; }
+
+  .bg-white { background: #fff; } .bg-crema-rosa { background: #FFF7F5; } .bg-vino { background: #3D1F2B; }
+  .bg-rosa-claro { background: #F9E1E3; } .bg-rosa { background: #B4436C; }
+
+  .nav { position: sticky; top: 0; z-index: 40; background: rgb(255 247 245 / .95); border-bottom: 1px solid #F3D5DA; }
+  .nav-in { padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .logo { height: 40px; width: auto; display: block; }
+  .nav-links { display: none; gap: 8px; font-family: Blinker, sans-serif; font-size: 16px; }
+  .nav-links a { padding: 6px 10px; color: #6B4F5A; }
+  @media (min-width: 900px) { .nav-links { display: flex; } }
+  .btn-login { display: none; align-items: center; padding: 8px 14px; border: 1px solid #3D1F2B; border-radius: 999px; font-family: Blinker, sans-serif; font-size: 13px; font-weight: 700; }
+  @media (min-width: 640px) { .btn-login { display: inline-flex; } }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 999px; padding: 15px 30px; font-family: Blinker, sans-serif; font-size: 17px; font-weight: 700; border: 0; }
+  .btn-sm { padding: 9px 18px; font-size: 14px; }
+  .flor .btn-rosa { background: #B4436C; color: #fff; } .flor .btn-rosa:hover { background: #9E3A5E; color: #fff; }
+  .flor .btn-rosa-claro { background: #E8A3B3; color: #3D1F2B; font-size: 18px; }
+  .btn-outline { border: 1.5px solid #3D1F2B; padding: 14px 28px; }
+  .full { display: flex; width: 100%; }
+
+  .sec { position: relative; padding: 72px 16px; overflow: hidden; }
+  .sec-sm { padding: 96px 16px 72px; }
+  @media (min-width: 768px) { .sec { padding: 104px 16px; } .sec-sm { padding: 96px 16px; } }
+
+  .eyebrow { font-family: Blinker, sans-serif; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: #B4436C; margin: 0 0 12px; }
+  .h1 { font-size: clamp(48px, 7vw, 84px); line-height: .98; letter-spacing: -.035em; margin: 24px 0; }
+  .h2 { font-size: clamp(36px, 4.5vw, 48px); line-height: 1.1; letter-spacing: -.02em; margin: 0 0 16px; }
+  .h2-lg { font-size: clamp(38px, 5vw, 52px); }
+  .h3 { font-size: 20px; margin: 0 0 4px; }
+  .h3-lg { font-size: 22px; margin: 0 0 6px; }
+  .sub { font-size: 18px; line-height: 1.6; color: #6B4F5A; margin: 0 0 32px; }
+  .muted { font-size: 16px; line-height: 1.6; color: #6B4F5A; margin: 0; }
+  .muted-c { color: #6B4F5A; }
+
+  .hero { position: relative; padding: 48px 16px 72px; overflow: hidden; }
+  @media (min-width: 768px) { .hero { padding: 64px 16px 88px; } }
+  .hero-grid { position: relative; grid-template-columns: repeat(auto-fit, minmax(min(100%, 480px), 1fr)); }
+  .blob { position: absolute; border-radius: 58% 42% 55% 45% / 48% 60% 40% 52%; }
+  .pill { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 999px; background: #fff; border: 1px solid #F3D5DA; font-family: Blinker, sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #B4436C; }
+  .nowrap { white-space: nowrap; }
+  .scribble { position: relative; display: inline-block; }
+  .scribble svg { position: absolute; left: 0; bottom: -6px; width: 100%; height: 14px; }
+  .lead { font-size: 20px; line-height: 1.6; color: #6B4F5A; max-width: 500px; margin: 0 0 28px; }
+  .trust { display: flex; flex-wrap: wrap; gap: 10px 24px; margin-top: 32px; font-family: Blinker, sans-serif; font-size: 15px; font-weight: 600; color: #4A6346; }
+  .trust span { display: inline-flex; align-items: center; gap: 6px; }
+
+  .hero-photo { position: relative; display: flex; justify-content: center; padding: 24px 24px 32px 8px; }
+  .arch-wrap { position: relative; width: 100%; max-width: 460px; }
+  .arch-outline { position: absolute; inset: 0; transform: translate(18px, 18px); border-radius: 240px 240px 28px 28px; border: 2px solid #E8A3B3; }
+  .arch { position: relative; margin: 0; height: clamp(440px, 60vw, 580px); border-radius: 240px 240px 28px 28px; overflow: hidden; background: #F9E1E3; box-shadow: 0 30px 60px -24px rgb(61 31 43 / .45); }
+  .arch img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; }
+  .arch figcaption { position: absolute; left: 16px; right: 16px; bottom: 16px; display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-radius: 16px; background: rgb(61 31 43 / .82); color: #fff; font-family: Blinker, sans-serif; font-size: 15px; font-weight: 600; }
+  .arch figcaption { z-index: 3; }
+  .bg-rosa-claro .eyebrow { color: #9E3A5E; }
+  .flower { position: absolute; left: -12px; bottom: -8px; z-index: 2; }
+  .dot { flex-shrink: 0; width: 10px; height: 10px; border-radius: 50%; background: #E8A3B3; }
+  .dot-rosa { width: 8px; height: 8px; background: #B4436C; }
+  .tag { position: absolute; display: none; align-items: center; gap: 8px; background: #fff; padding: 10px 16px; border-radius: 999px; font-family: Blinker, sans-serif; font-size: 14px; font-weight: 700; box-shadow: 0 12px 24px -8px rgb(61 31 43 / .3); }
+  .tag-verde { background: #E3EADF; color: #2F4A2C; }
+  @media (min-width: 1024px) { .tag { display: flex; } }
+
+  .seasons { background: #3D1F2B; padding: 22px 16px; }
+  .seasons-in { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 12px 28px; font-family: 'DM Serif Display', serif; font-style: italic; font-size: 22px; color: #F9E1E3; }
+
+  .agenda-list { list-style: none; margin: 0 0 32px; padding: 0; display: flex; flex-direction: column; gap: 20px; }
+  .agenda-list li { display: flex; align-items: flex-start; gap: 14px; }
+  .num { flex-shrink: 0; display: flex; width: 48px; height: 48px; border-radius: 50% 50% 50% 8px; background: #F9E1E3; color: #9E3A5E; font-family: 'DM Serif Display', serif; font-size: 20px; align-items: center; justify-content: center; margin-bottom: 16px; }
+  .num-sm { width: 44px; height: 44px; font-size: 18px; margin: 0; }
+  .num-rosa { background: #E8A3B3; color: #3D1F2B; }
+  .num-lg { width: 56px; height: 56px; border-radius: 50%; font-size: 22px; margin: 24px 0 0; }
+  .video-col { position: relative; display: flex; flex-direction: column; align-items: center; }
+  .video-outline { position: absolute; width: 400px; max-width: 100%; height: 700px; top: 20px; border-radius: 220px 220px 32px 32px; border: 2px solid #E8A3B3; transform: translate(18px, 0); }
+  .phone { position: relative; width: 340px; max-width: 100%; aspect-ratio: 9 / 16; border-radius: 40px; padding: 12px; background: #3D1F2B; box-shadow: 0 40px 80px -30px rgb(61 31 43 / .55); }
+  .phone video { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 30px; background: #111; }
+  .play { position: absolute; left: 50%; top: 50%; width: 96px; height: 96px; margin: -48px 0 0 -48px; padding: 0 0 0 6px; border: 0; border-radius: 50%; background: rgb(255 255 255 / .95); display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 16px 32px -8px rgb(0 0 0 / .5); transition: transform .2s; }
+  .play:hover { transform: scale(1.08); }
+  .play[hidden] { display: none; }
+  .video-cap { display: inline-flex; align-items: center; gap: 8px; margin: 20px 0 0; font-family: Blinker, sans-serif; font-size: 15px; font-weight: 700; }
+
+  .halo { position: absolute; border-radius: 50%; border: 1px solid rgb(232 163 179 / .3); }
+  .pos { position: relative; margin: 0 auto 56px; max-width: 1060px; }
+  .pos img { display: block; width: 100%; height: auto; border-radius: 28px; border: 1px solid rgb(232 163 179 / .3); box-shadow: 0 40px 80px -30px rgb(0 0 0 / .6); }
+  .pos figcaption { text-align: center; font-size: 15px; color: rgb(255 255 255 / .75); margin-top: 16px; }
+  .ann { position: absolute; display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; background: #fff; color: #3D1F2B; font-family: Blinker, sans-serif; font-size: 14px; font-weight: 700; box-shadow: 0 12px 24px -8px rgb(0 0 0 / .45); white-space: nowrap; }
+  @media (max-width: 900px) { .ann { display: none; } }
+  .cards3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 20px; }
+  .card-vino { padding: 28px; border-radius: 24px; background: #4A2836; border: 1px solid rgb(232 163 179 / .2); }
+  .card-vino .h3, .card-prob .h3 { font-size: 21px; margin-bottom: 6px; }
+
+  .grid-prob { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 56px; align-items: start; }
+  .cards2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 20px; }
+  .card-prob { padding: 28px; border-radius: 28px 28px 28px 4px; background: #FFF7F5; border: 1px solid #F3D5DA; }
+
+  .hw { gap: 24px; }
+  .card-hw { padding: 36px 32px 32px; border-radius: 160px 160px 24px 24px; background: #fff; text-align: center; display: flex; flex-direction: column; gap: 10px; align-items: center; }
+  .card-hw .h3 { font-size: 24px; margin: 8px 0 0; }
+  .card-hw-rec { background: #3D1F2B; box-shadow: 0 30px 50px -24px rgb(61 31 43 / .5); }
+  .card-hw-rec .h3 { margin-top: 0; }
+  .badge { padding: 5px 14px; border-radius: 999px; background: #B4436C; color: #fff; font-family: Blinker, sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; }
+  .hw-price { font-size: 30px; }
+  .hw-price span { font-family: Blinker, sans-serif; font-size: 14px; color: #6B4F5A; }
+  .card-hw-rec .hw-price span { color: rgb(255 255 255 / .7); }
+
+  .quote { position: relative; max-width: 820px; margin: 0 auto; padding: 56px 24px; border-radius: 32px; background: #fff; border: 1px solid #F3D5DA; text-align: center; }
+  @media (min-width: 768px) { .quote { padding: 56px 48px; } }
+  .quote-flower { position: absolute; top: -48px; left: 50%; transform: translateX(-50%); }
+  .quote blockquote { font-family: 'DM Serif Display', serif; font-style: italic; font-size: clamp(22px, 3vw, 28px); line-height: 1.4; margin: 16px 0 24px; }
+  .quote figcaption { font-size: 16px; }
+  .quote b { font-family: Blinker, sans-serif; font-size: 18px; }
+
+  .cmp { display: flex; align-items: flex-start; gap: 16px; padding: 24px; border-radius: 24px; }
+  .cmp-yes { background: #F9E1E3; }
+  .cmp-no { background: #FFF7F5; border: 1px solid #F3D5DA; }
+  .cmp-ico { flex-shrink: 0; display: flex; width: 44px; height: 44px; border-radius: 50%; align-items: center; justify-content: center; }
+  .cmp-yes .cmp-ico { background: #B4436C; }
+  .cmp-no .cmp-ico { background: #fff; border: 1px solid #F3D5DA; }
+  .plan { border-radius: 200px 200px 32px 32px; background: #3D1F2B; padding: 88px 24px 40px; text-align: center; box-shadow: 0 30px 60px -24px rgb(61 31 43 / .45); }
+  @media (min-width: 768px) { .plan { padding: 88px 40px 40px; } }
+  .plan .eyebrow { margin-bottom: 8px; }
+  .plan-price { font-size: 72px; color: #fff; line-height: 1; }
+  .plan-per { font-family: Blinker, sans-serif; font-size: 18px; color: #F9E1E3; font-weight: 600; margin: 8px 0 4px; }
+  .plan-note { font-size: 15px; color: rgb(255 255 255 / .7); margin: 0 0 28px; }
+  .plan-list { list-style: none; margin: 0 0 32px; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px 20px; color: #fff; font-size: 16px; text-align: left; }
+  .plan-list li { display: flex; align-items: center; gap: 10px; }
+
+  .cta { max-width: 880px; margin: 0 auto; gap: 24px; }
+  .cta-card { border-radius: 24px; padding: 32px; text-align: center; }
+  .cta-ico { display: flex; width: 56px; height: 56px; border-radius: 50%; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 22px; }
+  .flor .phone-link { font-size: 24px; color: #F9E1E3; }
+
+  .foot { background: #FFF7F5; padding: 56px 16px 32px; border-top: 1px solid #F3D5DA; display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center; }
+  .logo-sm { height: 32px; width: auto; display: block; }
+  .made { display: inline-flex; align-items: center; gap: 6px; font-family: Blinker, sans-serif; font-size: 15px; font-weight: 600; margin: 0; }
+
+  @keyframes fxMorph { 0% { border-radius: 58% 42% 55% 45% / 48% 60% 40% 52%; transform: translate(0, 0) rotate(0) } 50% { border-radius: 45% 55% 40% 60% / 60% 42% 58% 40%; transform: translate(-24px, 18px) rotate(8deg) } 100% { border-radius: 52% 48% 62% 38% / 42% 52% 48% 58%; transform: translate(12px, -10px) rotate(-4deg) } }
+  @keyframes fxDrift { to { transform: translate(28px, -22px) scale(1.08) } }
+  @keyframes fxSway { from { transform: rotate(-3deg) } to { transform: rotate(3deg) } }
+  @keyframes fxFloat { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-8px) } }
+  @keyframes fxPetal { 0% { transform: translate(0, 0) rotate(0); opacity: 0 } 10%, 90% { opacity: .9 } 100% { transform: translate(-160px, 420px) rotate(220deg); opacity: 0 } }
+  .fx-morph { animation: fxMorph 18s ease-in-out infinite alternate; }
+  .fx-drift { animation: fxDrift 12s ease-in-out infinite alternate; }
+  .fx-sway { transform-origin: 50% 100%; animation: fxSway 5s ease-in-out infinite alternate; }
+  .fx-float { animation: fxFloat 4s ease-in-out infinite; }
+  .fx-float2 { animation: fxFloat 4s ease-in-out 2s infinite; }
+  /* Funciones is ~1500px tall: these fall the whole section, behind the content. */
+  @keyframes fxPetalLong { 0% { transform: translate(0, 0) rotate(0); opacity: 0 } 5%, 92% { opacity: .7 } 100% { transform: translate(-220px, 1600px) rotate(400deg); opacity: 0 } }
+  .fx-petal.fx-petal-long { animation-name: fxPetalLong; }
+  .fx-petal { position: absolute; top: -30px; width: 14px; height: 22px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; animation: fxPetal linear infinite; }
+  .motion-toggle { position: fixed; left: 16px; bottom: 16px; z-index: 50; padding: 8px 14px; border-radius: 999px; border: 1px solid #F3D5DA; background: #fff; color: #3D1F2B; font-family: Blinker, sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; box-shadow: 0 8px 20px -8px rgb(61 31 43 / .35); }
+  .motion-toggle:focus-visible { outline: 3px solid #9E3A5E; outline-offset: 2px; }
+  .flor.paused * { animation-play-state: paused !important; }
+  @media (prefers-reduced-motion: reduce) { .motion-toggle { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .fx-morph, .fx-drift, .fx-sway, .fx-float, .fx-float2, .fx-petal { animation: none; } .fx-petal { display: none; } }
+</style>
