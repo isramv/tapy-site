@@ -21,8 +21,9 @@ export default defineConfig({
   integrations: [
     sitemap({
       i18n: { defaultLocale: 'es', locales: { es: 'es-MX', en: 'en-US' } },
-      // /links is the business-card QR target; it is noindex.
-      filter: page => !page.endsWith('/links'),
+      // noindex pages stay out: /links (business-card QR) and /thank-you (the
+      // form's Ads conversion page; a search visit there would count as one).
+      filter: page => !/\/(links|thank-you)$/.test(page),
     }),
   ],
 })

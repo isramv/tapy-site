@@ -39,7 +39,9 @@ const {
 } = Astro.props
 
 const site = 'https://tapy.mx'
-const canonical = new URL(Astro.url.pathname, site).href
+// build.format 'file' prerenders /cafeterias as cafeterias.html, so the build-time
+// pathname carries .html (and index.html for /). Canonicals use the public URL.
+const canonical = new URL(Astro.url.pathname.replace(/(\/index)?\.html$/, '') || '/', site).href
 ---
 <!doctype html>
 <html lang={locale === 'es' ? 'es-MX' : 'en'}>
