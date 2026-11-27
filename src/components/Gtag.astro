@@ -2,17 +2,33 @@
 // Google Ads tag, on the same pages the Nuxt site loaded it. gtag.js (~150 KB)
 // is fetched only after the page has loaded so it never competes with the
 // page's own resources; calls made before that queue in dataLayer.
+//
+// Conversions: the contact form is a URL conversion in Google Ads (/thank-you),
+// no code. WhatsApp clicks to our number fire WA_SEND_TO; business landings
+// (/l/*) don't load this tag, so their WhatsApp buttons never count.
+import { WA_NUMBER } from '../lib/whatsapp'
+
 const ID = 'AW-10806267747'
+// Google Analytics 4 rides on the same gtag.js; one more config line.
+const GA_ID = 'G-Z45ZH9D7YX'
+// Google Ads → Goals → Conversions → the WhatsApp action → "Use Google tag" → send_to.
+const WA_SEND_TO = ''
 ---
-<script is:inline define:vars={{ ID }}>
+<script is:inline define:vars={{ ID, GA_ID, WA_NUMBER, WA_SEND_TO }}>
   window.dataLayer = window.dataLayer || []
   function gtag() { dataLayer.push(arguments) }
   gtag('js', new Date())
   gtag('config', ID)
+  gtag('config', GA_ID)
   addEventListener('load', () => {
     const s = document.createElement('script')
     s.async = true
     s.src = `https://www.googletagmanager.com/gtag/js?id=${ID}`
     document.head.append(s)
   })
+  if (WA_SEND_TO) {
+    document.addEventListener('click', (e) => {
+      if (e.target.closest?.(`a[href^="https://wa.me/${WA_NUMBER}"]`)) gtag('event', 'conversion', { send_to: WA_SEND_TO })
+    })
+  }
 </script>
