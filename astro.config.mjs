@@ -15,7 +15,9 @@ export default defineConfig({
   // No Astro sessions. Without this the adapter adds a SESSION KV binding with
   // no id, which branch preview deploys reject (code 10021).
   session: false,
-  build: { format: 'file' },
+  // inlineStylesheets: the one 9 KB (gzip) stylesheet goes in the HTML, so first
+  // paint doesn't wait on a second request and the fonts are found sooner.
+  build: { format: 'file', inlineStylesheets: 'always' },
   i18n: {
     defaultLocale: 'es',
     locales: ['es', 'en'],
