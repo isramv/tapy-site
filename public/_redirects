@@ -7,3 +7,9 @@
 /oauth/*        https://app.tapy.mx/oauth/:splat        301
 /paused         https://app.tapy.mx/paused              301
 /unauthorized   https://app.tapy.mx/unauthorized        301
+
+# Old Nuxt URLs Google still has: trailing slashes and the old sitemap. 301 so the
+# clean URL replaces them (the asset layer's own slash redirect is a 307).
+/sitemap.xml    /sitemap-index.xml  301
+/:page/         /:page              301
+/en/:page/      /en/:page           301
