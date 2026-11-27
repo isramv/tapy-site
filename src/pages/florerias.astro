@@ -15,6 +15,8 @@ const WA_TRIAL_URL = waUrl('Hola, quiero probar Tapy en mi florería')
 const WA_DEMO_URL = waUrl('Hola, quiero ver la agenda de pedidos de Tapy en una demo')
 const VIDEO_URL = 'https://media.tapy.mx/agenda-pedidos.mp4'
 const poster = await getImage({ src: videoPoster, width: 680, format: 'webp' })
+const og = await getImage({ src: heroPhoto, width: 1200, format: 'jpg' })
+const ogImage = new URL(og.src, Astro.site).href
 
 const price = '$849'
 const trust = ['Funciona sin internet', 'Sin contratos', 'Soporte humano real', 'Prueba gratuita']
@@ -56,19 +58,21 @@ const n = (i: number) => String(i + 1).padStart(2, '0')
 ---
 <Base
   title="tapy. · Punto de venta para florerías en México"
-  description="El punto de venta hecho para florerías: cobra, lleva la agenda de pedidos con anticipos y entregas, controla tu inventario de flores e imprime tickets desde una tablet. Funciona sin internet."
+  description="Punto de venta para florerías: cobra, lleva tu agenda de pedidos con anticipos, controla tu inventario de flores e imprime tickets. Funciona sin internet."
+  ogImage={ogImage}
   gtag
 >
   <div class="flor">
+    <button type="button" id="motion-toggle" class="motion-toggle" aria-pressed="false" hidden>Pausar animaciones</button>
     <header class="nav">
       <nav aria-label="Navegación principal" class="wrap nav-in">
-        <div class="row gap-24">
+        <div class="row g-24">
           <a href="/"><img width="204" height="80" src="/logo/tapy-horizontal-color-80.webp" alt="tapy." class="logo" /></a>
           <div class="nav-links">
             <a href="#agenda">Agenda</a><a href="#funciones">Funciones</a><a href="#retos">Retos</a><a href="#precio">Precio</a>
           </div>
         </div>
-        <div class="row gap-12">
+        <div class="row g-12">
           <a href="https://app.tapy.mx/auth/login" class="btn-login">Iniciar sesión</a>
           <a href={WA_URL} target="_blank" rel="noopener" class="btn btn-rosa btn-sm"><i class="pi pi-whatsapp" aria-hidden="true"></i>WhatsApp</a>
         </div>
@@ -89,9 +93,9 @@ const n = (i: number) => String(i + 1).padStart(2, '0')
             <span class="pill">
               <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="#E8A3B3"><ellipse cx="12" cy="6" rx="3.5" ry="5" /><ellipse cx="12" cy="18" rx="3.5" ry="5" /><ellipse cx="6" cy="12" rx="5" ry="3.5" /><ellipse cx="18" cy="12" rx="5" ry="3.5" /><circle cx="12" cy="12" r="3" fill="#B4436C" /></svg>Hecho para florerías
             </span>
-            <h1 class="h1">Tú pones las <em>flores</em>,<br>nosotros el <span class="nowrap"><span class="underline">orden<svg aria-hidden="true" viewBox="0 0 200 16" preserveAspectRatio="none"><path d="M2 10C50 2 120 2 198 8" fill="none" stroke="#E8A3B3" stroke-width="5" stroke-linecap="round" /></svg></span>.</span></h1>
+            <h1 class="h1">Tú pones las <em>flores</em>,<br>nosotros el <span class="nowrap"><span class="scribble">orden<svg aria-hidden="true" viewBox="0 0 200 16" preserveAspectRatio="none"><path d="M2 10C50 2 120 2 198 8" fill="none" stroke="#E8A3B3" stroke-width="5" stroke-linecap="round" /></svg></span>.</span></h1>
             <p class="lead">El punto de venta hecho para florerías. Cobra en segundos, controla tu inventario de flores y arreglos, e imprime tickets al instante. Todo desde una tablet.</p>
-            <div class="row wrap-row gap-12">
+            <div class="row wrap-row g-12">
               <a href={WA_URL} target="_blank" rel="noopener" class="btn btn-rosa"><i class="pi pi-whatsapp" aria-hidden="true"></i>Pedir información</a>
               <a href="#precio" class="btn btn-outline">Ver qué incluye</a>
             </div>
@@ -123,7 +127,7 @@ const n = (i: number) => String(i + 1).padStart(2, '0')
 
       <section id="agenda" class="sec bg-crema-rosa">
         <div aria-hidden="true" class="fx-drift blob" style="width:420px;height:420px;right:-120px;top:80px;border-radius:50%;background:#F9E1E3"></div>
-        <div class="wrap-sm grid2 gap-64">
+        <div class="wrap-sm grid2 g-64">
           <div>
             <p class="eyebrow">Agenda de pedidos</p>
             <h2 class="h2">Ningún pedido se te olvida, <em>ni el 14 de febrero</em></h2>
@@ -151,8 +155,8 @@ const n = (i: number) => String(i + 1).padStart(2, '0')
       </section>
 
       <section id="funciones" class="sec bg-vino">
-        <div aria-hidden="true" class="ring" style="width:420px;height:420px;left:-160px;top:-160px"></div>
-        <div aria-hidden="true" class="ring" style="width:300px;height:300px;right:-100px;bottom:-120px"></div>
+        <div aria-hidden="true" class="halo" style="width:420px;height:420px;left:-160px;top:-160px"></div>
+        <div aria-hidden="true" class="halo" style="width:300px;height:300px;right:-100px;bottom:-120px"></div>
         <div aria-hidden="true" class="fx-petal fx-petal-long" style="left:12%;background:#E8A3B3;animation-duration:28s"></div>
         <div aria-hidden="true" class="fx-petal fx-petal-long" style="left:35%;background:#F9E1E3;animation-duration:34s;animation-delay:9s"></div>
         <div aria-hidden="true" class="fx-petal fx-petal-long" style="left:62%;background:#E8A3B3;animation-duration:31s;animation-delay:4s"></div>
@@ -221,12 +225,12 @@ const n = (i: number) => String(i + 1).padStart(2, '0')
       </section>
 
       <section id="precio" class="sec bg-white">
-        <div class="wrap-sm grid2 gap-56">
+        <div class="wrap-sm grid2 g-56">
           <div>
             <p class="eyebrow">Precio transparente</p>
             <h2 class="h2">Sin letra chiquita, <em>sin módulos extra</em></h2>
             <p class="sub">Lo que otros cobran como “extra”, nosotros lo incluimos.</p>
-            <div class="col gap-16">
+            <div class="col g-16">
               <div class="cmp cmp-yes">
                 <span class="cmp-ico"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10" /></svg></span>
                 <div><h3 class="h3">Tapy: {price}/mes + IVA — todo incluido</h3><p class="muted">Punto de venta, agenda de pedidos, inventario, reportes, tickets, offline, soporte y capacitación. Un solo precio.</p></div>
@@ -260,7 +264,7 @@ const n = (i: number) => String(i + 1).padStart(2, '0')
         <div class="wrap-sm rel">
           <div class="center head">
             <h2 class="h2 h2-lg white">¿Todo listo para modernizar <em style="color:#FFE4EA">tu florería?</em></h2>
-            <p class="sub white-85 m0">Escríbenos por WhatsApp y te ayudamos a empezar. Sin compromiso.</p>
+            <p class="sub white m0">Escríbenos por WhatsApp y te ayudamos a empezar. Sin compromiso.</p>
           </div>
           <div class="cards2 cta">
             <div class="cta-card bg-white">
@@ -298,7 +302,18 @@ const n = (i: number) => String(i + 1).padStart(2, '0')
   play.addEventListener('click', () => {
     video.controls = true
     play.hidden = true
-    video.play()
+    video.focus()
+    video.play().catch(() => {})
+  })
+
+  // WCAG 2.2.2: the petals and blobs loop forever, so they need a pause control.
+  const flor = document.querySelector('.flor') as HTMLElement
+  const motion = document.getElementById('motion-toggle') as HTMLButtonElement
+  motion.hidden = false
+  motion.addEventListener('click', () => {
+    const paused = flor.classList.toggle('paused')
+    motion.setAttribute('aria-pressed', String(paused))
+    motion.textContent = paused ? 'Reanudar animaciones' : 'Pausar animaciones'
   })
 </script>
 
@@ -316,9 +331,9 @@ const n = (i: number) => String(i + 1).padStart(2, '0')
   .row { display: flex; align-items: center; }
   .wrap-row { flex-wrap: wrap; }
   .col { display: flex; flex-direction: column; }
-  .gap-12 { gap: 12px; } .gap-16 { gap: 16px; } .gap-24 { gap: 24px; }
+  .g-12 { gap: 12px; } .g-16 { gap: 16px; } .g-24 { gap: 24px; }
   .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr)); gap: 56px; align-items: center; }
-  .gap-64 { gap: 64px; } .gap-56 { gap: 56px; }
+  .g-64 { gap: 64px; } .g-56 { gap: 56px; }
   .center { text-align: center; }
   .head { max-width: 680px; margin: 0 auto 56px; }
   .m0 { margin: 0 !important; } .mb-18 { margin-bottom: 18px !important; }
@@ -366,10 +381,10 @@ const n = (i: number) => String(i + 1).padStart(2, '0')
   .blob { position: absolute; border-radius: 58% 42% 55% 45% / 48% 60% 40% 52%; }
   .pill { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 999px; background: #fff; border: 1px solid #F3D5DA; font-family: Blinker, sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #B4436C; }
   .nowrap { white-space: nowrap; }
-  .underline { position: relative; display: inline-block; }
-  .underline svg { position: absolute; left: 0; bottom: -6px; width: 100%; height: 14px; }
+  .scribble { position: relative; display: inline-block; }
+  .scribble svg { position: absolute; left: 0; bottom: -6px; width: 100%; height: 14px; }
   .lead { font-size: 20px; line-height: 1.6; color: #6B4F5A; max-width: 500px; margin: 0 0 28px; }
-  .trust { display: flex; flex-wrap: wrap; gap: 10px 24px; margin-top: 32px; font-family: Blinker, sans-serif; font-size: 15px; font-weight: 600; color: #5E7A5A; }
+  .trust { display: flex; flex-wrap: wrap; gap: 10px 24px; margin-top: 32px; font-family: Blinker, sans-serif; font-size: 15px; font-weight: 600; color: #4A6346; }
   .trust span { display: inline-flex; align-items: center; gap: 6px; }
 
   .hero-photo { position: relative; display: flex; justify-content: center; padding: 24px 24px 32px 8px; }
@@ -378,6 +393,8 @@ const n = (i: number) => String(i + 1).padStart(2, '0')
   .arch { position: relative; margin: 0; height: clamp(440px, 60vw, 580px); border-radius: 240px 240px 28px 28px; overflow: hidden; background: #F9E1E3; box-shadow: 0 30px 60px -24px rgb(61 31 43 / .45); }
   .arch img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; }
   .arch figcaption { position: absolute; left: 16px; right: 16px; bottom: 16px; display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-radius: 16px; background: rgb(61 31 43 / .82); color: #fff; font-family: Blinker, sans-serif; font-size: 15px; font-weight: 600; }
+  .arch figcaption { z-index: 3; }
+  .bg-rosa-claro .eyebrow { color: #9E3A5E; }
   .flower { position: absolute; left: -12px; bottom: -8px; z-index: 2; }
   .dot { flex-shrink: 0; width: 10px; height: 10px; border-radius: 50%; background: #E8A3B3; }
   .dot-rosa { width: 8px; height: 8px; background: #B4436C; }
@@ -390,7 +407,7 @@ const n = (i: number) => String(i + 1).padStart(2, '0')
 
   .agenda-list { list-style: none; margin: 0 0 32px; padding: 0; display: flex; flex-direction: column; gap: 20px; }
   .agenda-list li { display: flex; align-items: flex-start; gap: 14px; }
-  .num { flex-shrink: 0; display: flex; width: 48px; height: 48px; border-radius: 50% 50% 50% 8px; background: #F9E1E3; color: #B4436C; font-family: 'DM Serif Display', serif; font-size: 20px; align-items: center; justify-content: center; margin-bottom: 16px; }
+  .num { flex-shrink: 0; display: flex; width: 48px; height: 48px; border-radius: 50% 50% 50% 8px; background: #F9E1E3; color: #9E3A5E; font-family: 'DM Serif Display', serif; font-size: 20px; align-items: center; justify-content: center; margin-bottom: 16px; }
   .num-sm { width: 44px; height: 44px; font-size: 18px; margin: 0; }
   .num-rosa { background: #E8A3B3; color: #3D1F2B; }
   .num-lg { width: 56px; height: 56px; border-radius: 50%; font-size: 22px; margin: 24px 0 0; }
@@ -403,7 +420,7 @@ const n = (i: number) => String(i + 1).padStart(2, '0')
   .play[hidden] { display: none; }
   .video-cap { display: inline-flex; align-items: center; gap: 8px; margin: 20px 0 0; font-family: Blinker, sans-serif; font-size: 15px; font-weight: 700; }
 
-  .ring { position: absolute; border-radius: 50%; border: 1px solid rgb(232 163 179 / .3); }
+  .halo { position: absolute; border-radius: 50%; border: 1px solid rgb(232 163 179 / .3); }
   .pos { position: relative; margin: 0 auto 56px; max-width: 1060px; }
   .pos img { display: block; width: 100%; height: auto; border-radius: 28px; border: 1px solid rgb(232 163 179 / .3); box-shadow: 0 40px 80px -30px rgb(0 0 0 / .6); }
   .pos figcaption { text-align: center; font-size: 15px; color: rgb(255 255 255 / .75); margin-top: 16px; }
@@ -472,5 +489,9 @@ const n = (i: number) => String(i + 1).padStart(2, '0')
   @keyframes fxPetalLong { 0% { transform: translate(0, 0) rotate(0); opacity: 0 } 5%, 92% { opacity: .7 } 100% { transform: translate(-220px, 1600px) rotate(400deg); opacity: 0 } }
   .fx-petal.fx-petal-long { animation-name: fxPetalLong; }
   .fx-petal { position: absolute; top: -30px; width: 14px; height: 22px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; animation: fxPetal linear infinite; }
+  .motion-toggle { position: fixed; left: 16px; bottom: 16px; z-index: 50; padding: 8px 14px; border-radius: 999px; border: 1px solid #F3D5DA; background: #fff; color: #3D1F2B; font-family: Blinker, sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; box-shadow: 0 8px 20px -8px rgb(61 31 43 / .35); }
+  .motion-toggle:focus-visible { outline: 3px solid #9E3A5E; outline-offset: 2px; }
+  .flor.paused * { animation-play-state: paused !important; }
+  @media (prefers-reduced-motion: reduce) { .motion-toggle { display: none; } }
   @media (prefers-reduced-motion: reduce) { .fx-morph, .fx-drift, .fx-sway, .fx-float, .fx-float2, .fx-petal { animation: none; } .fx-petal { display: none; } }
 </style>

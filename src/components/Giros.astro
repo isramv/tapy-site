@@ -42,7 +42,7 @@ const giros = [
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       {giros.map(g => (
-        <a href={g.href} class="flex flex-col gap-4 rounded-2xl bg-crema border border-crema-border p-7 text-negro no-underline transition-shadow hover:shadow-lg">
+        <a href={g.href} class="flex flex-col gap-4 rounded-2xl bg-crema border border-solid border-crema-border p-7 text-negro hover:text-negro no-underline transition-shadow hover:shadow-lg">
           <div class="w-14 h-14 rounded-full bg-amarillo flex items-center justify-center">
             <svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               {g.circle && <circle cx="12" cy="8" r="3" />}
