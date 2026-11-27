@@ -25,17 +25,40 @@ const navigationItems = [
   { id: 'contact', icon: 'pi-envelope', label: t('Contact'), ariaLabel: t('Navigate to contact section') },
 ]
 
-const title = 'tapy. - Business Management Made Simple'
-const description = 'Streamline your restaurant operations with tapy. Manage orders, inventory, and customers with our all-in-one restaurant management solution.'
+const title = t('home.metaTitle')
+const description = t('home.metaDescription')
+// Tells Google what tapy. is (a POS app by this organization) for rich results.
+const jsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': 'https://tapy.mx/#org',
+      'name': 'tapy.',
+      'url': 'https://tapy.mx/',
+      'logo': 'https://tapy.mx/logo/tapy-horizontal-color.png',
+      'email': 'support@tapy.mx',
+      'contactPoint': { '@type': 'ContactPoint', 'telephone': '+523319878090', 'contactType': 'sales', 'areaServed': 'MX', 'availableLanguage': ['es', 'en'] },
+    },
+    {
+      '@type': 'SoftwareApplication',
+      'name': 'tapy. PDV',
+      'applicationCategory': 'BusinessApplication',
+      'operatingSystem': 'Web, Windows, Android',
+      'description': description,
+      'publisher': { '@id': 'https://tapy.mx/#org' },
+    },
+  ],
+})
 ---
 <Base
   locale={locale}
   title={title}
   description={description}
-  keywords="restaurant management, POS system, inventory management, order management, customer database, tapy"
   alternatePath="/"
   gtag
 >
+  <script slot="head" type="application/ld+json" set:html={jsonLd} />
   <div class="home-page min-h-screen bg-white font-body">
     <a
       href="#main-content"

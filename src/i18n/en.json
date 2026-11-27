@@ -159,5 +159,9 @@
   "tapy on your phone": "tapy on your phone",
   "tapy orders screen": "tapy orders screen",
   "tapy.": "tapy.",
-  "© {year} {company}. All rights reserved.": "© {year} {company}. All rights reserved."
+  "© {year} {company}. All rights reserved.": "© {year} {company}. All rights reserved.",
+  "home.metaTitle": "tapy. · Point of sale for cafés, restaurants and small businesses",
+  "home.metaDescription": "A point of sale for your business: take payments, control your inventory and print tickets from a tablet. Works offline. Book a demo.",
+  "contact.metaTitle": "Contact us · tapy.",
+  "privacy.metaDescription": "How tapy. handles personal data of businesses, staff and customers: what data, why, who it is shared with and how to exercise your rights."
 }
