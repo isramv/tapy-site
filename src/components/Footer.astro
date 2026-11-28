@@ -1,5 +1,5 @@
 ---
-import { useT, type Locale } from '../i18n'
+import { localePath, useT, type Locale } from '../i18n'
 
 const { locale } = Astro.props as { locale: Locale }
 const t = useT(locale)
@@ -12,6 +12,7 @@ const year = new Date().getFullYear().toString()
       <p class="text-sm text-negro/60 m-0">
         {t('© {year} {company}. All rights reserved.', { year, company: t('tapy.') })}
       </p>
+      <a href={localePath(locale, '/privacidad')} class="text-sm text-negro/60 hover:text-negro underline">{t('privacy.title')}</a>
     </div>
   </div>
 </footer>
