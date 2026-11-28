@@ -13,3 +13,12 @@
 /sitemap.xml    /sitemap-index.xml  301
 /:page/         /:page              301
 /en/:page/      /en/:page           301
+
+# Business landings lived at the root on the Nuxt site (tapy.mx/miniluk); they
+# are /l/<slug> now. Only the ones Google indexed; new landings start at /l/.
+/kamal-studio-floral       /l/kamal-studio-floral       301
+/arlop-fiori               /l/arlop-fiori               301
+/el-secreto-las-flores     /l/el-secreto-las-flores     301
+/sushi-cool                /l/sushi-cool                301
+/miniluk                   /l/miniluk                   301
+/tortas-ahogadas-don-eddy  /l/tortas-ahogadas-don-eddy  301
