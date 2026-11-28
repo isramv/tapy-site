@@ -3,6 +3,8 @@
 // /cafeterias and /heladerias, which share views/Landing.astro. Spanish only.
 import '@fontsource/dm-serif-display/latin-400.css'
 import '@fontsource/dm-serif-display/latin-400-italic.css'
+import dmSerif from '@fontsource/dm-serif-display/files/dm-serif-display-latin-400-normal.woff2?url'
+import dmSerifItalic from '@fontsource/dm-serif-display/files/dm-serif-display-latin-400-italic.woff2?url'
 import { Image, getImage } from 'astro:assets'
 import Base from '../layouts/Base.astro'
 import { waUrl } from '../lib/whatsapp'
@@ -14,7 +16,6 @@ const WA_URL = waUrl('Hola, quiero info de Tapy para mi florería')
 const WA_TRIAL_URL = waUrl('Hola, quiero probar Tapy en mi florería')
 const WA_DEMO_URL = waUrl('Hola, quiero ver la agenda de pedidos de Tapy en una demo')
 const VIDEO_URL = 'https://media.tapy.mx/agenda-pedidos.mp4'
-const poster = await getImage({ src: videoPoster, width: 680, format: 'webp' })
 const og = await getImage({ src: heroPhoto, width: 1200, format: 'jpg' })
 const ogImage = new URL(og.src, Astro.site).href
 
@@ -62,6 +63,10 @@ const n = (i: number) => String(i + 1).padStart(2, '0')
   ogImage={ogImage}
   gtag
 >
+  <Fragment slot="head">
+    <link rel="preload" href={dmSerif} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={dmSerifItalic} as="font" type="font/woff2" crossorigin />
+  </Fragment>
   <div class="flor">
     <button type="button" id="motion-toggle" class="motion-toggle" aria-pressed="false" hidden>Pausar animaciones</button>
     <header class="nav">
@@ -142,9 +147,11 @@ const n = (i: number) => String(i + 1).padStart(2, '0')
           <div class="video-col">
             <div aria-hidden="true" class="video-outline"></div>
             <div class="phone">
-              <video id="agenda-video" controls playsinline preload="none" poster={poster.src} aria-label="Video: cómo funciona la agenda de pedidos de tapy.">
+              <video id="agenda-video" controls playsinline preload="none" aria-label="Video: cómo funciona la agenda de pedidos de tapy.">
                 <source src={VIDEO_URL} type="video/mp4" />
               </video>
+              {/* Poster as a real <img> so it gets a srcset; <video poster> only takes one size. */}
+              <Image id="agenda-poster" class="poster" src={videoPoster} alt="" widths={[330, 660]} sizes="316px" loading="lazy" hidden />
               <button type="button" id="agenda-play" class="play" aria-label="Reproducir video de la agenda de pedidos (50 segundos)" hidden>
                 <svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24" fill="#B4436C"><path d="M8 5.5v13l11-6.5z" /></svg>
               </button>
@@ -297,11 +304,14 @@ const n = (i: number) => String(i + 1).padStart(2, '0')
   // play; without JS the video keeps its native controls.
   const video = document.getElementById('agenda-video') as HTMLVideoElement
   const play = document.getElementById('agenda-play') as HTMLButtonElement
+  const posterImg = document.getElementById('agenda-poster') as HTMLImageElement
   video.controls = false
   play.hidden = false
+  posterImg.hidden = false
   play.addEventListener('click', () => {
     video.controls = true
     play.hidden = true
+    posterImg.hidden = true
     video.focus()
     video.play().catch(() => {})
   })
@@ -338,7 +348,7 @@ const n = (i: number) => String(i + 1).padStart(2, '0')
   .head { max-width: 680px; margin: 0 auto 56px; }
   .m0 { margin: 0 !important; } .mb-18 { margin-bottom: 18px !important; }
   .white { color: #fff !important; } .white-75 { color: rgb(255 255 255 / .75) !important; } .white-85 { color: rgb(255 255 255 / .85) !important; }
-  .rosa-claro { color: #E8A3B3; }
+  .rosa-claro { color: #E8A3B3 !important; }
   .grow { flex-grow: 1; }
   .small { font-size: 14px; }
 
@@ -387,6 +397,8 @@ const n = (i: number) => String(i + 1).padStart(2, '0')
   .trust { display: flex; flex-wrap: wrap; gap: 10px 24px; margin-top: 32px; font-family: Blinker, sans-serif; font-size: 15px; font-weight: 600; color: #4A6346; }
   .trust span { display: inline-flex; align-items: center; gap: 6px; }
 
+  /* Top-aligned so the photo does not move when the h1 web font swaps in (CLS). */
+  .hero-grid { align-items: start; }
   .hero-photo { position: relative; display: flex; justify-content: center; padding: 24px 24px 32px 8px; }
   .arch-wrap { position: relative; width: 100%; max-width: 460px; }
   .arch-outline { position: absolute; inset: 0; transform: translate(18px, 18px); border-radius: 240px 240px 28px 28px; border: 2px solid #E8A3B3; }
@@ -415,6 +427,8 @@ const n = (i: number) => String(i + 1).padStart(2, '0')
   .video-outline { position: absolute; width: 400px; max-width: 100%; height: 700px; top: 20px; border-radius: 220px 220px 32px 32px; border: 2px solid #E8A3B3; transform: translate(18px, 0); }
   .phone { position: relative; width: 340px; max-width: 100%; aspect-ratio: 9 / 16; border-radius: 40px; padding: 12px; background: #3D1F2B; box-shadow: 0 40px 80px -30px rgb(61 31 43 / .55); }
   .phone video { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 30px; background: #111; }
+  .poster { position: absolute; inset: 12px; width: calc(100% - 24px); height: calc(100% - 24px); object-fit: cover; border-radius: 30px; }
+  .poster[hidden] { display: none; }
   .play { position: absolute; left: 50%; top: 50%; width: 96px; height: 96px; margin: -48px 0 0 -48px; padding: 0 0 0 6px; border: 0; border-radius: 50%; background: rgb(255 255 255 / .95); display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 16px 32px -8px rgb(0 0 0 / .5); transition: transform .2s; }
   .play:hover { transform: scale(1.08); }
   .play[hidden] { display: none; }
