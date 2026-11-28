@@ -32,6 +32,14 @@ const description = t('home.metaDescription')
 const jsonLd = JSON.stringify({
   '@context': 'https://schema.org',
   '@graph': [
+    // Site name Google shows above each result (it was guessing "Cloudflare").
+    {
+      '@type': 'WebSite',
+      'name': 'tapy.',
+      'alternateName': ['tapy', 'tapy.mx'],
+      'url': 'https://tapy.mx/',
+      'publisher': { '@id': 'https://tapy.mx/#org' },
+    },
     {
       '@type': 'Organization',
       '@id': 'https://tapy.mx/#org',
